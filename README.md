@@ -8,4 +8,12 @@
 
 - Meant for use in [LUGOS](https://github.com/lugvitc/LUG_custom_distro) (A Bedrock-derived distro made by the Linux Club OS Team).
 
+## Installation
 
+- To add this repo to your Arch distribution, open `/etc/pacman.conf` and add this at the end :
+
+```bash
+[LUGOS-repo]
+SigLevel = Optional TrustAll
+Server = https://lugvitc.org/LUGOS-repo/x86_64
+```
