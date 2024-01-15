@@ -1,6 +1,6 @@
 <img title="" src="https://i.imgur.com/Kq4ER0L.png" alt="Linux Club Logo" data-align="center">
 
-# stratOS-repo
+# StratOS-repo
 
 ## About
 
@@ -13,7 +13,7 @@
 - To add this repo to your Arch distribution, open `/etc/pacman.conf` and add this at the end :
 
 ```bash
-[LUGOS-repo]
+[StratOS-repo]
 SigLevel = Optional TrustAll
-Server = https://lugvitc.org/stratOS-repo/x86_64
+Server = https://lugvitc.org/StratOS-repo/x86_64
 ```
