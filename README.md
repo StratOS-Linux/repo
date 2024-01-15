@@ -6,7 +6,7 @@
 
 - A custom Arch repo hosted on GitHub.
 
-- Meant for use in [stratOS](https://github.com/lugvitc/LUG_custom_distro) (A Bedrock-derived distro made by the Linux Club OS Team).
+- Meant for use in [StratOS](https://github.com/lugvitc/LUG_custom_distro) (A Bedrock-derived distro made by the Linux Club OS Team).
 
 ## Installation
 
