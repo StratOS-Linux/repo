@@ -15,5 +15,5 @@
 ```bash
 [StratOS-repo]
 SigLevel = Optional TrustAll
-Server = https://lugvitc.org/StratOS-repo/x86_64
+Server = https://StratOS-Linux.github.io/StratOS-repo/x86_64
 ```
