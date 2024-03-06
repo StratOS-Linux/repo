@@ -1,1 +1,1 @@
-aur sync --repo LUGOS-repo --root x86_64  -u
+aur sync --repo StratOS-repo --root x86_64  -u
