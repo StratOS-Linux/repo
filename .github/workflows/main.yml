@@ -46,7 +46,7 @@ jobs:
             sudo chmod -R 777 ./kpmcore-git
             cd kpmcore-git
             sudo -u builder makepkg -cfs --noconfirm
-            sudo pacman -U *.pkg.tar.zst
+            sudo pacman -U *.pkg.tar.zst --noconfirm
             mv *.pkg.tar.zst $dir/x86_64/
 
 
