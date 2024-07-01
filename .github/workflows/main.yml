@@ -55,6 +55,7 @@ jobs:
                 git clone https://aur.archlinux.org/$i
                 sudo chmod -R 777 ./$i
                 cd $i
+                cp PKGBUILD $dir/PKGBUILDS/$i
                 sudo -u builder makepkg -cfs --noconfirm
                 mv *.pkg.tar.zst $dir/x86_64/
                 cd ..
