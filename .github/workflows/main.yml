@@ -46,16 +46,18 @@ jobs:
             sudo chmod -R 777 ./kpmcore-git
             cd kpmcore-git
             sudo -u builder makepkg -cfs --noconfirm
+            cp *.pkg.tar.zst $dir/x86_64/
+            cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
             sudo pacman -U *.pkg.tar.zst --noconfirm
-            mv *.pkg.tar.zst $dir/x86_64/
+            rm -rf ../kpmcore-git
 
 
-            PACKAGES=( "calamares-git" "aurutils" "bibata-cursor-theme" "eww-wayland" "gruvbox-plus-icon-theme-git" "pandoc-bin" "python-clickgen" "ventoy-bin" "yay-bin" "libadwaita-without-adwaita" "mkinitcpio-openswap" )
+            PACKAGES=( "calamares-git" "aurutils" "bibata-cursor-theme" "eww-wayland" "gruvbox-plus-icon-theme-git" "pandoc-bin" "python-clickgen" "ventoy-bin" "yay-bin" "mkinitcpio-openswap" )
             for i in "${PACKAGES[@]}"; do
                 git clone https://aur.archlinux.org/$i
                 sudo chmod -R 777 ./$i
                 cd $i
-                cp PKGBUILD $dir/PKGBUILDS/$i
+                cp PKGBUILD $dir/PKGBUILDS/$i/PKGBUILD
                 sudo -u builder makepkg -cfs --noconfirm
                 mv *.pkg.tar.zst $dir/x86_64/
                 cd ..
