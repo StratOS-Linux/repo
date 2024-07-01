@@ -43,6 +43,7 @@ jobs:
 
             # Build kpmcore first (Calamares)
             git clone https://aur.archlinux.org/kpmcore-git
+            sudo chmod -R 777 ./kpmcore-git
             cd kpmcore-git
             sudo -u builder makepkg -cfs --noconfirm
             sudo pacman -U *.pkg.tar.zst
