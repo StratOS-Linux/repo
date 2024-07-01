@@ -49,7 +49,8 @@ jobs:
             cp *.pkg.tar.zst $dir/x86_64/
             cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
             sudo pacman -U *.pkg.tar.zst --noconfirm
-            rm -rf ../kpmcore-git
+            cd ..
+            rm -rf kpmcore-git
 
 
             PACKAGES=( "calamares-git" "aurutils" "bibata-cursor-theme" "eww-wayland" "gruvbox-plus-icon-theme-git" "pandoc-bin" "python-clickgen" "ventoy-bin" "yay-bin" "mkinitcpio-openswap" )
