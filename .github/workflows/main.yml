@@ -26,7 +26,7 @@ jobs:
           pacman -S sudo --noconfirm
           echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = https://StratOS-Linux.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
           sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
-          sudo pacman -Syy git icu python-clickgen gtk-update-icon-cache ckbcomp fd wget ninja qt6-tools base-devel cmake fakeroot github-cli extra-cmake-modules --needed --noconfirm
+          sudo pacman -Syy git python-clickgen gtk-update-icon-cache ckbcomp fd wget ninja qt6-tools base-devel cmake fakeroot github-cli extra-cmake-modules --needed --noconfirm
           # sudo pacman -S yaml-cpp boost qt5-base qt5-declarative hwinfo python-jsonschema python-yaml solid squashfs-tools qt5-quickcontrols2 qt5-svg qt5-tools qt5-translations qt5-webengine libpwquality libyaml kpmcore kcoreaddons ki18n kconfig kservice kwidgetsaddons kiconthemes kitemviews kxmlgui kbookmarks kcompletion --needed --noconfirm
           git clone -b dev https://github.com/zstg/StratOS-repo
 
@@ -41,19 +41,18 @@ jobs:
             dir="$(pwd)"/StratOS-repo
             rm -rf $dir/x86_64/**.** $dir/x86_64/**
 
-            # Build kpmcore first (Calamares)
-            git clone https://aur.archlinux.org/kpmcore-git
-            sudo chmod -R 777 ./kpmcore-git
-            cd kpmcore-git
-            sudo -u builder makepkg -cfs --noconfirm
-            cp *.pkg.tar.zst $dir/x86_64/
-            cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
-            sudo pacman -U *.pkg.tar.zst --noconfirm
-            cd ..
-            rm -rf kpmcore-git
+            # Build kpmcore first (Calamares)                                  
+            git clone https://aur.archlinux.org/kpmcore-git                    
+            sudo chmod -R 777 ./kpmcore-git                                    
+            cd kpmcore-git                                                     
+            sudo -u builder makepkg -cfs --noconfirm                           
+            cp *.pkg.tar.zst $dir/x86_64/                                      
+            cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD                    
+            sudo pacman -U *.pkg.tar.zst --noconfirm                           
+            cd ..                                                              
+            rm -rf kpmcore-git    
 
-
-            PACKAGES=( "calamares-git" "aurutils" "bibata-cursor-theme" "eww-wayland" "gruvbox-plus-icon-theme-git" "pandoc-bin" "python-clickgen" "ventoy-bin" "yay-bin" "mkinitcpio-openswap" )
+            PACKAGES=("bibata-cursor-theme" "eww" "gruvbox-plus-icon-theme-git" "pandoc-bin" "python-clickgen" "ventoy-bin" "yay-bin") # "calamares-git")
             for i in "${PACKAGES[@]}"; do
                 git clone https://aur.archlinux.org/$i
                 sudo chmod -R 777 ./$i
