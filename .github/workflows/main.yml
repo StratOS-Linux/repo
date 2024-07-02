@@ -40,7 +40,7 @@ jobs:
         run: |
             dir="$(pwd)"
             echo Dir is $dir
-            ls $dir
+            ls $dir/StratOS-repo
             rm -rf $dir/x86_64/**.**
 
             # Build kpmcore first (Calamares)                                  
@@ -48,8 +48,8 @@ jobs:
             sudo chmod -R 777 ./kpmcore-git                                    
             cd kpmcore-git                                                     
             sudo -u builder makepkg -cfs --noconfirm                           
-            cp *.pkg.tar.zst $dir/x86_64/                                      
-            cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD                    
+            cp *.pkg.tar.zst $dir/StratOS-repo/x86_64/                                      
+            cp PKGBUILD $dir/StratOS-repo/PKGBUILDS/kpmcore-git/PKGBUILD                    
             sudo pacman -U *.pkg.tar.zst --noconfirm                           
             cd ..                                                              
             rm -rf kpmcore-git    
