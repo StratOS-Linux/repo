@@ -1,0 +1,25 @@
+# Maintainer: ZeStig <zestig@duck.com>
+pkgname=grab
+pkgver=1.0
+pkgrel=4
+pkgdesc="Definitely not a system info fetch script"
+arch=('x86_64')
+url="https://github.com/StratOS-Linux/grab"
+license=('GPL')
+depends=('gcc' 'make') 
+
+prepare() {
+  cd "$srcdir"
+  git clone "$url" "$pkgname-$pkgver"
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make grab
+  make run
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  sudo make DESTDIR="$pkgdir/" install
+}

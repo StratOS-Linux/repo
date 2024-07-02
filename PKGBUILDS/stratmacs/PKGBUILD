@@ -1,0 +1,103 @@
+################################################################################
+JIT="NO"          # Disable native just-in-time compilation with libgccjit available
+                  # in core.
+                  #
+                  # To compile all site-lisp on demand (repos/AUR packages,
+                  # ELPA, MELPA, whatever), add
+                  #    (setq native-comp-deferred-compilation t)
+                  # to your .emacs file.
+                  # 
+                  # And to keep the eln cache clean add 
+                  #    (setq native-compile-prune-cache t)
+                  # to delete old versions.
+
+################################################################################
+
+################################################################################
+pkgname=stratmacs
+pkgver=29.3
+_pkgver_major=${pkgver/.*}
+pkgrel=3
+pkgdesc="The extensible, customizable, self-documenting real-time display editor (Lucid toolkit version with native compilation)"
+arch=('x86_64')
+url="http://www.gnu.org/software/emacs/emacs.html"
+license=('GPL3')
+depends=(
+    libxpm
+    tree-sitter
+    ttf-jetbrains-mono-nerd
+    git
+    cmake
+)
+optdepends=(
+  'lldb: For debugging with LLDB instead of GDB'
+)
+conflicts=(emacs)
+provides=("emacs=$_pkgver_major")
+################################################################################
+
+################################################################################
+
+if [[ $JIT == "YES" ]]; then
+  depends+=( 'libgccjit' );
+fi
+################################################################################
+
+################################################################################
+build() {
+    git clone --single-branch --depth=1 https://github.com/emacs-mirror/emacs.git $srcdir/emacs-$pkgver --branch=emacs-29 --depth=1
+    cd $srcdir/emacs-$pkgver
+    echo Current dir: $(pwd)
+
+    local _conf=(
+	--with-gnutls
+	--without-xwidgets 
+	--with-json 
+	--with-tree-sitter 
+	--with-png 
+	--with-jpeg 
+	--without-wide-int 
+	--with-sound 
+	--without-native-compilation 
+	--with-pgtk 
+	--without-x-toolkit 
+	--without-x 
+	--with-libsystemd 
+	--with-dbus 
+	--with-file-notifications=yes 
+	--with-pdumper=yes
+	--sysconfdir=/etc
+	--prefix=/usr
+	--libexecdir=/usr/lib
+	--localstatedir=/var
+	--disable-build-details
+	--with-modules
+    )
+
+    ################################################################################
+
+    if [[ $JIT == "YES" ]]; then
+	_conf+=( '--with-native-compilation=aot' );
+    fi
+
+    ################################################################################
+
+    cd $srcdir/emacs-$pkgver
+    ./autogen.sh
+    ./configure "${_conf[@]}"
+
+    make
+}
+
+package() {
+  cd $srcdir/emacs-$pkgver
+  make DESTDIR="$pkgdir" install
+  # mkdir -p ~/.config
+  # [[ -d ~/.config/emacs ]] && mv ~/.config/emacs ~/.config/emacs.bak
+  # [[ -d ~/.emacs.d ]] && mv ~/.emacs.d ~/.config/emacs.d.bak
+  # git clone https://github.com/StratOS-Linux/Stratmacs.git $HOME/.config/emacs
+  # fix user/root permissions on usr/share files
+  # find "$pkgdir"/usr/share/emacs/$pkgver -exec chown root:root {} \;
+}
+
+################################################################################
