@@ -38,7 +38,8 @@ jobs:
 
       - name: Build and package software
         run: |
-            dir="$(pwd)"/StratOS-repo
+            dir="$(pwd)"
+            echo Dir is $dir
             rm -rf $dir/x86_64/**.** $dir/x86_64/**
 
             # Build kpmcore first (Calamares)                                  
