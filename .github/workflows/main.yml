@@ -60,7 +60,23 @@ jobs:
             curl -sS https://github.com/web-flow.gpg | gpg --import --batch --yes -
 
 
-            PACKAGES=("albert" "aurutils" "bibata-cursor-theme" "calamares-git" "gruvbox-plus-icon-theme-git" "libadwaita-without-adwaita-git" "mkinitcpio-openswap" "nwg-dock-hyprland" "pandoc-bin" "python-clickgen" "swayosd-git" "ventoy-bin" "yay-bin")
+            PACKAGES=(
+              "albert" 
+              "aurutils" 
+              "bibata-cursor-theme" 
+              "calamares-git" 
+              # "eww"
+              "gruvbox-plus-icon-theme-git" 
+              "libadwaita-without-adwaita-git" 
+              "mkinitcpio-openswap" 
+              "nwg-dock-hyprland" 
+              "pandoc-bin" 
+              "python-clickgen" 
+              # "swayosd-git" 
+              "ventoy-bin" 
+              "yay-bin"
+            )
+
             for i in "${PACKAGES[@]}"; do
                 git clone https://aur.archlinux.org/$i
                 sudo chmod -R 777 ./$i
