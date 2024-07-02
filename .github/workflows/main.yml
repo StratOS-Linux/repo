@@ -55,8 +55,8 @@ jobs:
             cd ..                                                              
             rm -rf kpmcore-git    
             # import some GPG keys for EWW
-            curl -sS https://github.com/elkowar.gpg | gpg --import -i -
-            curl -sS https://github.com/web-flow.gpg | gpg --import -i -
+            curl -sS https://github.com/elkowar.gpg | gpg --import --batch --yes -
+            curl -sS https://github.com/web-flow.gpg | gpg --import --batch --yes -
 
 
             PACKAGES=("eww") # "bibata-cursor-theme" "gruvbox-plus-icon-theme-git" "pandoc-bin" "python-clickgen" "ventoy-bin" "yay-bin") # "calamares-git")
