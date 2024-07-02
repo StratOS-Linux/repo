@@ -1,16 +1,16 @@
 # Maintainer: Antoine Bertin <antoine.bertin@archlinux.org>
 
 pkgname=gruvbox-plus-icon-theme-git
-pkgver=4.0.r680.g812b197
-pkgrel=1
+pkgver=5.3.1.r196.gc82d485
+pkgrel=2
 pkgdesc="Icon theme based on Gruvbox color scheme"
 arch=(any)
 url=https://github.com/SylEleuth/gruvbox-plus-icon-pack
 license=(GPL3)
 depends=('gtk-update-icon-cache')
-makedepends=('git' 'fd')
+makedepends=('git')
 provides=(gruvbox-plus-icon-theme)
-conflicts=()
+conflicts=(gruvbox-plus-icon-theme)
 options=(!strip !emptydirs)
 source=("$pkgname::git+$url")
 sha256sums=('SKIP')
@@ -22,8 +22,6 @@ pkgver() {
 
 package() {
     cd "$pkgname/Gruvbox-Plus-Dark"
-    # remove files with whitespaces as it messes up gtk-update-icon-cache
-    fd '.*\s[^/]*' -X rm {}
     # remove cache as it will be generated again
     rm icon-theme.cache
     install -d "$pkgdir/usr/share/icons"
