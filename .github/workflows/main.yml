@@ -39,10 +39,12 @@ jobs:
       - name: Build and package software
         run: |
             dir="$(pwd)"/StratOS-repo
-            echo Dir is $dir
-            ls $dir
-            rm -rf $dir/x86_64
-            mkdir -p $dir/x86_64
+            # echo Dir is $dir
+            # ls $dir
+            # rm -rf $dir/x86_64
+            # mkdir -p $dir/x86_64
+            sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm # for now
+
 
             # Build kpmcore first (Calamares)                                  
             git clone https://aur.archlinux.org/kpmcore-git                    
@@ -56,8 +58,8 @@ jobs:
             cd ..                                                              
             rm -rf kpmcore-git    
             # import some GPG keys for EWW
-            curl -sS https://github.com/elkowar.gpg | gpg --import --batch --yes -
-            curl -sS https://github.com/web-flow.gpg | gpg --import --batch --yes -
+            # curl -sS https://github.com/elkowar.gpg | gpg --import --batch --yes -
+            # curl -sS https://github.com/web-flow.gpg | gpg --import --batch --yes -
 
 
             PACKAGES=(
