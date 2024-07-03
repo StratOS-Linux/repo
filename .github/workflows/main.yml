@@ -52,17 +52,17 @@ jobs:
           # rm -rf kpmcore-git    
 
           PACKAGES=(
-            #"albert" 
+            # "albert" 
             # "aurutils" 
             # "bibata-cursor-theme"
-            "calamares-git" 
+            # "calamares-git" 
             # "gruvbox-plus-icon-theme-git" 
             # "libadwaita-without-adwaita-git" 
             # "mkinitcpio-openswap" 
             # "nwg-dock-hyprland" 
             # "pandoc-bin" 
             # "python-clickgen"
-            # "ventoy-bin" 
+            "ventoy-bin" 
             # "yay-bin"
           )
 
@@ -122,7 +122,7 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
         with:
-          token: ${{secrets.PAT_TOKEN}}
+          token: ${{secrets.GITHUB_TOKEN}}
 
     environment:
       name: github-pages
