@@ -39,7 +39,7 @@ jobs:
           dir="$(pwd)"/StratOS-repo
           # sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm # for now
 
-          Build kpmcore first (Calamares)                                  
+          # Build kpmcore first (Calamares)                                  
           git clone https://aur.archlinux.org/kpmcore-git                    
           sudo chmod -R 777 ./kpmcore-git                                    
           cd kpmcore-git                                                     
