@@ -54,14 +54,15 @@ jobs:
           PACKAGES=(
             "albert" 
             "aurutils" 
-            "bibata-cursor-theme"
+            # "bibata-cursor-theme"
+            "bibata-cursor-theme-bin"
             "calamares-git" 
             "gruvbox-plus-icon-theme-git" 
             "libadwaita-without-adwaita-git" 
             "mkinitcpio-openswap" 
             "nwg-dock-hyprland" 
             "pandoc-bin" 
-            "python-clickgen"
+            # "python-clickgen"
             "ventoy-bin" 
             "yay-bin"
           )
