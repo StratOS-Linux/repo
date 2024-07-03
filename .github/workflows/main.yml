@@ -37,65 +37,65 @@ jobs:
             echo '%wheel ALL=(ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers
 
       - name: Build and package software
-        run: |
-            dir="$(pwd)"/StratOS-repo
-            # echo Dir is $dir
-            # ls $dir
-            # rm -rf $dir/x86_64
-            # mkdir -p $dir/x86_64
-            sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm # for now
+        run: |  
+          dir="$(pwd)"/StratOS-repo
+          # echo Dir is $dir
+          # ls $dir
+          # rm -rf $dir/x86_64
+          # mkdir -p $dir/x86_64
+          sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm # for now
 
-	          # Build Rockers
-	          cd $dir/PKGBUILDS/rockers/
-            makepkg -scf --noconfirm
-	          rm -rf ./rockers-debug-*
-	          # sudo pacman -U ./rockers*.pkg.tar.zst -- noconfirm
-	          mv ./rockers*.pkg.tar.zst $dir/x86_64/
+          # Build Rockers
+          cd $dir/PKGBUILDS/rockers/
+          makepkg -scf --noconfirm
+          rm -rf ./rockers-debug-*
+          # sudo pacman -U ./rockers*.pkg.tar.zst -- noconfirm
+          mv ./rockers*.pkg.tar.zst $dir/x86_64/
 
-            # Build kpmcore first (Calamares)                                  
-            git clone https://aur.archlinux.org/kpmcore-git                    
-            sudo chmod -R 777 ./kpmcore-git                                    
-            cd kpmcore-git                                                     
-            sudo -u builder makepkg -cfs --noconfirm                           
-            rm -f **debug**.pkg.tar.zst                 
-            cp *.pkg.tar.zst $dir/x86_64/                                      
-            cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
-            sudo pacman -U *.pkg.tar.zst --noconfirm                           
-            cd ..                                                              
-            rm -rf kpmcore-git    
-            # import some GPG keys for EWW
-            # curl -sS https://github.com/elkowar.gpg | gpg --import --batch --yes -
-            # curl -sS https://github.com/web-flow.gpg | gpg --import --batch --yes -
+          # Build kpmcore first (Calamares)                                  
+          git clone https://aur.archlinux.org/kpmcore-git                    
+          sudo chmod -R 777 ./kpmcore-git                                    
+          cd kpmcore-git                                                     
+          sudo -u builder makepkg -cfs --noconfirm                           
+          rm -f **debug**.pkg.tar.zst                 
+          cp *.pkg.tar.zst $dir/x86_64/                                      
+          cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
+          sudo pacman -U *.pkg.tar.zst --noconfirm                           
+          cd ..                                                              
+          rm -rf kpmcore-git    
+          # import some GPG keys for EWW
+          # curl -sS https://github.com/elkowar.gpg | gpg --import --batch --yes -
+          # curl -sS https://github.com/web-flow.gpg | gpg --import --batch --yes -
 
 
-            PACKAGES=(
-              "albert" 
-              "aurutils" 
-              "bibata-cursor-theme" 
-              "calamares-git" 
-              # "eww"
-              "gruvbox-plus-icon-theme-git" 
-              "libadwaita-without-adwaita-git" 
-              "mkinitcpio-openswap" 
-              "nwg-dock-hyprland" 
-              "pandoc-bin" 
-              "python-clickgen" 
-              # "swayosd-git" 
-              "ventoy-bin" 
-              "yay-bin"
-            )
+          PACKAGES=(
+            "albert" 
+            "aurutils" 
+            "bibata-cursor-theme" 
+            "calamares-git" 
+            # "eww"
+            "gruvbox-plus-icon-theme-git" 
+            "libadwaita-without-adwaita-git" 
+            "mkinitcpio-openswap" 
+            "nwg-dock-hyprland" 
+            "pandoc-bin" 
+            "python-clickgen" 
+            # "swayosd-git" 
+            "ventoy-bin" 
+            "yay-bin"
+          )
 
-            for i in "${PACKAGES[@]}"; do
-                git clone https://aur.archlinux.org/$i
-                sudo chmod -R 777 ./$i
-                cd $i
-                cp PKGBUILD $dir/PKGBUILDS/$i/PKGBUILD
-                sudo -u builder makepkg -cfs --noconfirm
-                mv *.pkg.tar.zst $dir/x86_64/
-                cd ..
-                rm -rf $i
-            done
-            mv /tmp/*ckbcomp* $dir/x86_64/
+          for i in "${PACKAGES[@]}"; do
+              git clone https://aur.archlinux.org/$i
+              sudo chmod -R 777 ./$i
+              cd $i
+              cp PKGBUILD $dir/PKGBUILDS/$i/PKGBUILD
+              sudo -u builder makepkg -cfs --noconfirm
+              mv *.pkg.tar.zst $dir/x86_64/
+              cd ..
+              rm -rf $i
+          done
+          mv /tmp/*ckbcomp* $dir/x86_64/
 
       - name: Initialize and push
         env: 
