@@ -52,18 +52,18 @@ jobs:
           rm -rf kpmcore-git    
 
           PACKAGES=(
-            # "albert" 
-            # "aurutils" 
-            # "bibata-cursor-theme"
+            "albert" 
+            "aurutils" 
+            "bibata-cursor-theme"
             "calamares-git" 
-            # "gruvbox-plus-icon-theme-git" 
-            # "libadwaita-without-adwaita-git" 
-            # "mkinitcpio-openswap" 
-            # "nwg-dock-hyprland" 
-            # "pandoc-bin" 
+            "gruvbox-plus-icon-theme-git" 
+            "libadwaita-without-adwaita-git" 
+            "mkinitcpio-openswap" 
+            "nwg-dock-hyprland" 
+            "pandoc-bin" 
             "python-clickgen"
-            # "ventoy-bin" 
-            # "yay-bin"
+            "ventoy-bin" 
+            "yay-bin"
           )
 
           for i in "${PACKAGES[@]}"; do
