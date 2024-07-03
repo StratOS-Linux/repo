@@ -61,7 +61,7 @@ jobs:
             # "mkinitcpio-openswap" 
             # "nwg-dock-hyprland" 
             # "pandoc-bin" 
-            # "python-clickgen"
+            "python-clickgen"
             # "ventoy-bin" 
             # "yay-bin"
           )
