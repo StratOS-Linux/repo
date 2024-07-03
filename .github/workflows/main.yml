@@ -54,7 +54,7 @@ jobs:
           PACKAGES=(
             "albert" 
             "aurutils" 
-            # "bibata-cursor-theme"
+            "bibata-cursor-theme"
             "calamares-git" 
             "gruvbox-plus-icon-theme-git" 
             "libadwaita-without-adwaita-git" 
