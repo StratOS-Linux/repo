@@ -45,12 +45,12 @@ jobs:
             # mkdir -p $dir/x86_64
             sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm # for now
 
-			# Build Rockers
-			cd $dir/PKGBUILDS/rockers/
-			makepkg -scf --noconfirm
-			rm -rf ./rockers-debug-*
-			# sudo pacman -U ./rockers*.pkg.tar.zst -- noconfirm
-			mv ./rockers*.pkg.tar.zst $dir/x86_64/
+	    # Build Rockers
+	    cd $dir/PKGBUILDS/rockers/
+	    makepkg -scf --noconfirm
+	    rm -rf ./rockers-debug-*
+	    # sudo pacman -U ./rockers*.pkg.tar.zst -- noconfirm
+	    mv ./rockers*.pkg.tar.zst $dir/x86_64/
 
             # Build kpmcore first (Calamares)                                  
             git clone https://aur.archlinux.org/kpmcore-git                    
