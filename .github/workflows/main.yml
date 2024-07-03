@@ -113,6 +113,7 @@ jobs:
       contents: write
       pull-requests: write
       repository-projects: write
+      pages: write
     needs: website
     runs-on: ubuntu-latest
 
@@ -120,6 +121,8 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          token: ${{secrets.PAT_TOKEN}}
 
     environment:
       name: github-pages
