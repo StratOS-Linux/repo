@@ -1,11 +1,11 @@
-name: Build packages
+name: Build and Deploy Packages
 
 on:
   push:
     branches:
       - main
-  # schedule:
-  #   - cron: '0 0 * * *'  # Schedule to run every day at 12 AM UTC
+    # schedule:
+      # - cron: '0 0 * * *' # Schedule to run every day at 12 AM UTC
 
 jobs:
   build:
@@ -19,15 +19,13 @@ jobs:
       options: --privileged
 
     steps:
-
       - name: Set up Arch Linux environment
         run: |
           pacman -Syu --noconfirm
           pacman -S sudo --noconfirm
           echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = https://StratOS-Linux.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
           sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
-          sudo pacman -Syy git python-clickgen gtk-update-icon-cache fd wget ninja qt6-tools base-devel cmake fakeroot github-cli extra-cmake-modules --needed --noconfirm
-          # sudo ckbcomp pacman -S yaml-cpp boost qt5-base qt5-declarative hwinfo python-jsonschema python-yaml solid squashfs-tools qt5-quickcontrols2 qt5-svg qt5-tools qt5-translations qt5-webengine libpwquality libyaml kpmcore kcoreaddons ki18n kconfig kservice kwidgetsaddons kiconthemes kitemviews kxmlgui kbookmarks kcompletion --needed --noconfirm
+          sudo pacman -Syy git gtk-update-icon-cache fd wget ninja qt6-tools base-devel cmake fakeroot github-cli extra-cmake-modules --needed --noconfirm
           git clone https://github.com/StratOS-Linux/StratOS-repo 
 
       - name: Create dummy user for makepkg
@@ -39,18 +37,7 @@ jobs:
       - name: Build and package software
         run: |  
           dir="$(pwd)"/StratOS-repo
-          # echo Dir is $dir
-          # ls $dir
-          # rm -rf $dir/x86_64
-          # mkdir -p $dir/x86_64
           sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm # for now
-
-          # Build Rockers
-          cd $dir/PKGBUILDS/rockers/
-          makepkg -scf --noconfirm
-          rm -rf ./rockers-debug-*
-          # sudo pacman -U ./rockers*.pkg.tar.zst -- noconfirm
-          mv ./rockers*.pkg.tar.zst $dir/x86_64/
 
           # Build kpmcore first (Calamares)                                  
           git clone https://aur.archlinux.org/kpmcore-git                    
@@ -63,24 +50,18 @@ jobs:
           sudo pacman -U *.pkg.tar.zst --noconfirm                           
           cd ..                                                              
           rm -rf kpmcore-git    
-          # import some GPG keys for EWW
-          # curl -sS https://github.com/elkowar.gpg | gpg --import --batch --yes -
-          # curl -sS https://github.com/web-flow.gpg | gpg --import --batch --yes -
-
 
           PACKAGES=(
             "albert" 
             "aurutils" 
-            "bibata-cursor-theme" 
+            "bibata-cursor-theme"
             "calamares-git" 
-            # "eww"
             "gruvbox-plus-icon-theme-git" 
             "libadwaita-without-adwaita-git" 
             "mkinitcpio-openswap" 
             "nwg-dock-hyprland" 
             "pandoc-bin" 
-            # "python-clickgen" 
-            # "swayosd-git" 
+            "python-clickgen"
             "ventoy-bin" 
             "yay-bin"
           )
@@ -95,7 +76,6 @@ jobs:
               cd ..
               rm -rf $i
           done
-          mv /tmp/*ckbcomp* $dir/x86_64/
 
       - name: Initialize and push
         env: 
@@ -103,10 +83,44 @@ jobs:
         run: |
             dir="$(pwd)"/StratOS-repo
             cd $dir
-            # chmod +x ./initialize.sh
             bash ./initialize.sh
             git config --global user.name 'github-actions[bot]'
             git config --global user.email 'github-actions[bot]@users.noreply.github.com'
             git add .
             git commit -am "Update packages"
             git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/StratOS-Linux/StratOS-repo.git"
+
+
+  website:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Jekyll site
+        uses: actions/jekyll-build-pages@v1
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+            path: ./_site
+
+  deploy:
+    permissions: 
+      id-token: write
+      contents: write
+      pull-requests: write
+      repository-projects: write
+    needs: website
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
