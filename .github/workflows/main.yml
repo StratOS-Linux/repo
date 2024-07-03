@@ -23,7 +23,7 @@ jobs:
         run: |
           pacman -Syu --noconfirm
           pacman -S sudo --noconfirm
-          echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = https://zstg.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
+          echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = https://StratOS-Linux.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
           sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
           sudo pacman -Syy git gtk-update-icon-cache fd wget ninja qt6-tools base-devel cmake fakeroot github-cli extra-cmake-modules --needed --noconfirm
           git clone https://github.com/StratOS-Linux/StratOS-repo 
