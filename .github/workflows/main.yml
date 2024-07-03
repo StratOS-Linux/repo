@@ -37,7 +37,7 @@ jobs:
       - name: Build and package software
         run: |  
           dir="$(pwd)"/StratOS-repo
-          # sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm # for now
+          sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm # for now
 
           # Build kpmcore first (Calamares)                                  
           git clone https://aur.archlinux.org/kpmcore-git                    
@@ -52,18 +52,18 @@ jobs:
           rm -rf kpmcore-git    
 
           PACKAGES=(
-            "albert" 
-            "aurutils" 
+            # "albert" 
+            # "aurutils" 
             # "bibata-cursor-theme"
-            # "calamares-git" 
-            "gruvbox-plus-icon-theme-git" 
-            "libadwaita-without-adwaita-git" 
-            "mkinitcpio-openswap" 
-            "nwg-dock-hyprland" 
-            "pandoc-bin" 
-            "python-clickgen"
-            "ventoy-bin" 
-            "yay-bin"
+            "calamares-git" 
+            # "gruvbox-plus-icon-theme-git" 
+            # "libadwaita-without-adwaita-git" 
+            # "mkinitcpio-openswap" 
+            # "nwg-dock-hyprland" 
+            # "pandoc-bin" 
+            # "python-clickgen"
+            # "ventoy-bin" 
+            # "yay-bin"
           )
 
           for i in "${PACKAGES[@]}"; do
