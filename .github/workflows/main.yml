@@ -39,7 +39,7 @@ jobs:
           dir="$(pwd)"/StratOS-repo
           sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm # for now
 
-          # Build kpmcore first (Calamares)                                  
+          Build kpmcore first (Calamares)                                  
           git clone https://aur.archlinux.org/kpmcore-git                    
           sudo chmod -R 777 ./kpmcore-git                                    
           cd kpmcore-git                                                     
@@ -49,12 +49,11 @@ jobs:
           cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
           sudo pacman -U *.pkg.tar.zst --noconfirm                           
           cd ..                                                              
-          rm -rf kpmcore-git    
-
+          rm -rf kpmcore-git
           PACKAGES=(
             "albert" 
             "aurutils" 
-            # "bibata-cursor-theme"
+            "bibata-cursor-theme"
             "bibata-cursor-theme-bin"
             "calamares-git" 
             "gruvbox-plus-icon-theme-git" 
@@ -62,10 +61,12 @@ jobs:
             "mkinitcpio-openswap" 
             "nwg-dock-hyprland" 
             "pandoc-bin" 
-            # "python-clickgen"
+            "python-clickgen"
             "ventoy-bin" 
             "yay-bin"
           )
+
+          cd $dir/PKGBUILDS/rockers/; sudo chmod -R 777 ../rockers; sudo -u builder makepkg -cfs --noconfirm; rm -f **debug**.pkg.tar.zst; mv *.pkg.tar.zst $dir/x86_64/
 
           for i in "${PACKAGES[@]}"; do
               git clone https://aur.archlinux.org/$i
@@ -89,7 +90,7 @@ jobs:
             git config --global user.email 'github-actions[bot]@users.noreply.github.com'
             git add .
             git commit -am "Update packages"
-            git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/StratOS-Linux/StratOS-repo.git"
+            git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/themagitian/StratOS-repo.git"
 
 
   website:
