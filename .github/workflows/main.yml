@@ -53,6 +53,7 @@ jobs:
             "albert" 
             "aurutils" 
             "bibata-cursor-theme-bin"
+            "eww"
             "calamares-git" 
             "gruvbox-plus-icon-theme-git" 
             "libadwaita-without-adwaita-git" 
