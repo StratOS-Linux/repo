@@ -87,7 +87,7 @@ jobs:
             git config --global user.email 'github-actions[bot]@users.noreply.github.com'
             git add .
             git commit -am "Update packages"
-            git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/themagitian/StratOS-repo.git"
+            git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/StratOS-Linux/StratOS-repo.git"
 
 
   website:
