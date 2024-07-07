@@ -28,10 +28,10 @@ jobs:
           sudo pacman -Syy git gtk-layer-shell base-devel --needed --noconfirm # gtk-update-icon-cache fd wget ninja qt6-tools base-devel cmake fakeroot github-cli extra-cmake-modules --needed --noconfirm
           git clone https://github.com/StratOS-Linux/StratOS-repo 
           echo "Keys!"
-          curl -sS https://github.com/elkowar.gpg | gpg --import --yes -
-          curl -sS https://github.com/web-flow.gpg | gpg --import --yes -
+          sudo -u builder curl -sS https://github.com/elkowar.gpg | gpg --import --yes -
+          sudo -u builder curl -sS https://github.com/web-flow.gpg | gpg --import --yes -
           echo "GPG!"
-          gpg --recv-keys 862BA3D7D7760F13
+          sudo -u builder gpg --recv-keys 862BA3D7D7760F13
 
 
       - name: Create dummy user for makepkg
