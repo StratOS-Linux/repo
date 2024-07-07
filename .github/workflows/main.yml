@@ -21,7 +21,6 @@ jobs:
     steps:
       - name: Set up Arch Linux environment
         run: |
-          # pacman -Syu --noconfirm
           pacman -Sy sudo --noconfirm
           echo -e "\n[StratOS-repo]\nSigLevel = PackageOptional TrustAll\nServer = https://StratOS-Linux.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
           sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
@@ -46,10 +45,16 @@ jobs:
             sudo sed -e 's/#PACKAGER="John Doe <john@doe.com>"/PACKAGER="ZeStig <zestig@duck.com>"/' -e 's/#GPGKEY=""/GPGKEY="90D63B3FE2F217ED"/' -i /etc/makepkg.conf
             sudo pacman-key --init
             sudo pacman-key --populate archlinux
-            sudo -u builder gpg --keyserver keys.openpgp.org --recv-keys 90D63B3FE2F217ED
+            # sudo -u builder gpg --keyserver keys.openpgp.org --recv-keys 90D63B3FE2F217ED
             sudo pacman-key --recv-keys 90D63B3FE2F217ED
             sudo pacman-key --lsign-key 90D63B3FE2F217ED
-            cat /etc/makepkg.conf
+            sudo pacman-key --edit-key 90D63B3FE2F217ED <<EOF
+            trust
+            5
+            y
+            quit
+            EOF
+
 
 
       - name: Trust GPG key
