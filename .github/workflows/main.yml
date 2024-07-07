@@ -38,8 +38,16 @@ jobs:
             echo "Keys!"
             sudo -u builder curl -sS https://github.com/elkowar.gpg | gpg --import --yes -
             sudo -u builder curl -sS https://github.com/web-flow.gpg | gpg --import --yes -
-            echo "GPG!"
-            sudo -u builder gpg --recv-keys 862BA3D7D7760F13
+            # echo "GPG!"
+            # sudo -u builder gpg --recv-keys 862BA3D7D7760F13
+
+      - name: GPG
+        run: |
+            sudo sed -i 's/^#PACKAGER="/PACKAGER="ZeStig<zestig@duck.com>"/' /etc/makepkg.conf
+            sudo sed -i 's/^#GPGKEY="/GPGKEY="90D63B3FE2F217ED"/' /etc/makepkg.conf
+            sudo pacman-key --recv-keys 90D63B3FE2F217ED
+            sudo pacman-key --lsign-key 90D63B3FE2F217ED
+
 
       - name: Build and package software
         run: |  
@@ -79,9 +87,9 @@ jobs:
               sudo chmod -R 777 ./$i
               cd $i
               cp PKGBUILD $dir/PKGBUILDS/$i/PKGBUILD
-              sudo -u builder makepkg -cfs --noconfirm
-              rm -rf $dir/x86_64/"$i"**.pkg.tar.zst
-              mv *.pkg.tar.zst $dir/x86_64/
+              sudo -u builder makepkg --sign -cfs --noconfirm
+              rm -rf $dir/x86_64/"$i"**.pkg.tar.zst**
+              mv *.pkg.tar.zst** $dir/x86_64/
               cd ..
               rm -rf $i
           done
@@ -92,7 +100,7 @@ jobs:
         run: |
             dir="$(pwd)"/StratOS-repo
             cd $dir
-            bash ./initialize.sh
+            repo-add -Rn -sv x86_64/StratOS-repo.db.tar.gz x86_64/*.pkg.tar.zst
             git config --global user.name 'github-actions[bot]'
             git config --global user.email 'github-actions[bot]@users.noreply.github.com'
             git add .
