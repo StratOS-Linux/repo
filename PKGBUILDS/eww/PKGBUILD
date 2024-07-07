@@ -13,7 +13,7 @@ depends=(libdbusmenu-gtk3 gtk3 gtk-layer-shell)
 provides=(eww)
 conflicts=(eww)
 #install=$pkgname.install
-source=("git+$url?signed#commit=d87c2fdbfdc012e76d229e4e9ea3325bc0f23e89")
+source=("git+$url#commit=d87c2fdbfdc012e76d229e4e9ea3325bc0f23e89")
 # b2sums=('87aed3824d8549bf031a288c116bab16767d130e6939a8c12d03370dda4945260cf88185ce4680ac4b742f67e609bd429642995a6a91c967258022f8c50e7362')
 b2sums=('SKIP')
 validpgpkeys=(
