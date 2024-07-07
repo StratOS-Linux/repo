@@ -60,9 +60,7 @@ jobs:
             # y  # Confirm trust setting
             # quit
             curl -sS https://gitlab.com/zstg.gpg | sudo -u builder gpg --import --yes -
-            # curl -sS https://gitlab.com/zstg.gpg | sudo -u builder gpg --import-ownertrust -
-            # echo "5" | gpg --batch --passphrase "" --yes --command-fd 0 --edit-key 90D63B3FE2F217ED trust quit
-            # echo -e "5\ny\n" | gpg --command-fd 0 --batch --yes --edit-key 90D63B3FE2F217ED trust
+            echo "90D63B3FE2F217ED:6:" | sudo -u builder gpg --import-ownertrust
 
 
       - name: Build and package software
@@ -116,7 +114,7 @@ jobs:
         run: |
             dir="$(pwd)"/StratOS-repo
             cd $dir
-            repo-add -Rn -sv x86_64/StratOS-repo.db.tar.gz x86_64/*.pkg.tar.zst
+            repo-add -Rn -k 90D63B3FE2F217ED -sv x86_64/StratOS-repo.db.tar.gz x86_64/*.pkg.tar.zst
             git config --global user.name 'github-actions[bot]'
             git config --global user.email 'github-actions[bot]@users.noreply.github.com'
             git add .
