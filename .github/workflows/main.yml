@@ -50,46 +50,48 @@ jobs:
             sudo pacman-key --recv-keys 90D63B3FE2F217ED
             sudo pacman-key --lsign-key 90D63B3FE2F217ED
 
+            cat /etc/makepkg.conf
+
 
       - name: Build and package software
         run: |  
           dir="$(pwd)"/StratOS-repo
-          sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm # for now
+          # sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm # for now
                                
-          git clone https://aur.archlinux.org/kpmcore-git                    
-          sudo chmod -R 777 ./kpmcore-git                                    
-          cd kpmcore-git                                                     
-          sudo -u builder makepkg -cfs --noconfirm                           
-          rm -f **debug**.pkg.tar.zst                 
-          cp *.pkg.tar.zst $dir/x86_64/                                      
-          cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
-          sudo pacman -U *.pkg.tar.zst --noconfirm                           
-          cd ..                                                              
-          rm -rf kpmcore-git
+          # git clone https://aur.archlinux.org/kpmcore-git                    
+          # sudo chmod -R 777 ./kpmcore-git                                    
+          # cd kpmcore-git                                                     
+          # sudo -u builder makepkg --sign -crfs --noconfirm                           
+          # rm -f **debug**.pkg.tar.zst                 
+          # cp *.pkg.tar.zst $dir/x86_64/                                      
+          # cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
+          # sudo pacman -U *.pkg.tar.zst --noconfirm                           
+          # cd ..                                                              
+          # rm -rf kpmcore-git
 
           PACKAGES=(
-            "albert" 
-            "aurutils" 
-            "bibata-cursor-theme-bin"
-            "calamares-git" 
-            "eww"
-            "gruvbox-plus-icon-theme-git" 
-            "libadwaita-without-adwaita-git" 
-            "mkinitcpio-openswap" 
-            "nwg-dock-hyprland" 
-            "pandoc-bin" 
-            "ventoy-bin" 
+            # "albert" 
+            # "aurutils" 
+            # "bibata-cursor-theme-bin"
+            # "calamares-git" 
+            # "eww"
+            # "gruvbox-plus-icon-theme-git" 
+            # "libadwaita-without-adwaita-git" 
+            # "mkinitcpio-openswap" 
+            # "nwg-dock-hyprland" 
+            # "pandoc-bin" 
+            # "ventoy-bin" 
             "yay-bin"
           )
 
-          cd $dir/PKGBUILDS/rockers/; sudo chmod -R 777 ../rockers; sudo -u builder makepkg -cfs --noconfirm; rm -f **debug**.pkg.tar.zst; mv *.pkg.tar.zst $dir/x86_64/; cd $dir/
+          # cd $dir/PKGBUILDS/rockers/; sudo chmod -R 777 ../rockers; sudo -u builder makepkg --sign -crfs --noconfirm; rm -f **debug**.pkg.tar.zst; mv *.pkg.tar.zst $dir/x86_64/; cd $dir/
 
           for i in "${PACKAGES[@]}"; do
               git clone https://aur.archlinux.org/$i
               sudo chmod -R 777 ./$i
               cd $i
               cp PKGBUILD $dir/PKGBUILDS/$i/PKGBUILD
-              sudo -u builder makepkg --sign -cfs --noconfirm
+              sudo -u builder makepkg --sign -crfs --noconfirm
               rm -rf $dir/x86_64/"$i"**.pkg.tar.zst**
               mv *.pkg.tar.zst** $dir/x86_64/
               cd ..
