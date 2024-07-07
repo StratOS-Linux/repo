@@ -43,9 +43,10 @@ jobs:
         run: |
             sudo sed -e 's/#PACKAGER="John Doe <john@doe.com>"/PACKAGER="ZeStig <zestig@duck.com>"/' -e 's/#GPGKEY=""/GPGKEY="90D63B3FE2F217ED"/' -i /etc/makepkg.conf
             # sudo -u builder gpg --keyserver keys.openpgp.org --recv-keys 90D63B3FE2F217ED
-            sudo pacman-key --recv-keys 90D63B3FE2F217ED
-            sudo pacman-key --lsign-key 90D63B3FE2F217ED
-            echo -e "trust\n5\ny\nquit" | sudo pacman-key --edit-key 90D63B3FE2F217ED
+            sudo -u builder curl -sS https://gitlab.com/zstg.gpg | gpg --import --yes -
+            # sudo pacman-key --recv-keys 90D63B3FE2F217ED
+            # sudo pacman-key --lsign-key 90D63B3FE2F217ED
+            # echo -e "trust\n5\ny\nquit" | sudo pacman-key --edit-key 90D63B3FE2F217ED # this won't work
 
       - name: Trust GPG key
         run: |
