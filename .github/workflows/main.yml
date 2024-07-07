@@ -60,8 +60,7 @@ jobs:
             # y  # Confirm trust setting
             # quit
             curl -sS https://gitlab.com/zstg.gpg | sudo -u builder gpg --import --yes -
-            echo "90D63B3FE2F217ED:6:" | sudo -u builder gpg --import-ownertrust
-
+            sudo -u builder bash -c 'echo -e "5\ny\n" | gpg --command-fd 0 --batch --yes --edit-key 90D63B3FE2F217ED trust quit'
 
       - name: Build and package software
         run: |  
