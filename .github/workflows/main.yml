@@ -42,29 +42,29 @@ jobs:
           dir="$(pwd)"/StratOS-repo
           sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm # for now
                                
-          git clone https://aur.archlinux.org/kpmcore-git                    
-          sudo chmod -R 777 ./kpmcore-git                                    
-          cd kpmcore-git                                                     
-          sudo -u builder makepkg -cfs --noconfirm                           
-          rm -f **debug**.pkg.tar.zst                 
-          cp *.pkg.tar.zst $dir/x86_64/                                      
-          cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
-          sudo pacman -U *.pkg.tar.zst --noconfirm                           
-          cd ..                                                              
-          rm -rf kpmcore-git
+          # git clone https://aur.archlinux.org/kpmcore-git                    
+          # sudo chmod -R 777 ./kpmcore-git                                    
+          # cd kpmcore-git                                                     
+          # sudo -u builder makepkg -cfs --noconfirm                           
+          # rm -f **debug**.pkg.tar.zst                 
+          # cp *.pkg.tar.zst $dir/x86_64/                                      
+          # cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
+          # sudo pacman -U *.pkg.tar.zst --noconfirm                           
+          # cd ..                                                              
+          # rm -rf kpmcore-git
           PACKAGES=(
-            "albert" 
-            "aurutils" 
-            "bibata-cursor-theme-bin"
-            "calamares-git" 
+            # "albert" 
+            # "aurutils" 
+            # "bibata-cursor-theme-bin"
+            # "calamares-git" 
             "eww"
-            "gruvbox-plus-icon-theme-git" 
-            "libadwaita-without-adwaita-git" 
-            "mkinitcpio-openswap" 
-            "nwg-dock-hyprland" 
-            "pandoc-bin" 
-            "ventoy-bin" 
-            "yay-bin"
+            # "gruvbox-plus-icon-theme-git" 
+            # "libadwaita-without-adwaita-git" 
+            # "mkinitcpio-openswap" 
+            # "nwg-dock-hyprland" 
+            # "pandoc-bin" 
+            # "ventoy-bin" 
+            # "yay-bin"
           )
 
           cd $dir/PKGBUILDS/rockers/; sudo chmod -R 777 ../rockers; sudo -u builder makepkg -cfs --noconfirm; rm -f **debug**.pkg.tar.zst; mv *.pkg.tar.zst $dir/x86_64/; cd $dir/
