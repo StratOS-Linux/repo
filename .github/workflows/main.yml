@@ -25,7 +25,7 @@ jobs:
           pacman -S sudo --noconfirm
           echo -e "\n[StratOS-repo]\nSigLevel = PackageOptional TrustAll\nServer = https://StratOS-Linux.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
           sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
-          sudo pacman -Syy git gtk-layer-shell base-devel --needed --noconfirm # gtk-update-icon-cache fd wget ninja qt6-tools base-devel cmake fakeroot github-cli extra-cmake-modules --needed --noconfirm
+          sudo pacman -S git gtk-layer-shell base-devel --needed --noconfirm # gtk-update-icon-cache fd wget ninja qt6-tools base-devel cmake fakeroot github-cli extra-cmake-modules --needed --noconfirm
           git clone https://github.com/StratOS-Linux/StratOS-repo 
           
 
@@ -59,8 +59,8 @@ jobs:
             # 5  # Select trust level (5 is ultimate trust, adjust as needed)
             # y  # Confirm trust setting
             # quit
-            curl -sS https://gitlab.com/zstg.gpg | gpg --import --yes -
-            curl -sS https://gitlab.com/zstg.gpg | gpg --import-ownertrust -
+            curl -sS https://gitlab.com/zstg.gpg | sudo -u builder gpg --import --yes -
+            # curl -sS https://gitlab.com/zstg.gpg | sudo -u builder gpg --import-ownertrust -
             # echo "5" | gpg --batch --passphrase "" --yes --command-fd 0 --edit-key 90D63B3FE2F217ED trust quit
             # echo -e "5\ny\n" | gpg --command-fd 0 --batch --yes --edit-key 90D63B3FE2F217ED trust
 
