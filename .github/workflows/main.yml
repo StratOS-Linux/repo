@@ -80,6 +80,7 @@ jobs:
               cd $i
               cp PKGBUILD $dir/PKGBUILDS/$i/PKGBUILD
               sudo -u builder makepkg -cfs --noconfirm
+              rm -rf $dir/x86_64/"$i"**.pkg.tar.zst
               mv *.pkg.tar.zst $dir/x86_64/
               cd ..
               rm -rf $i
