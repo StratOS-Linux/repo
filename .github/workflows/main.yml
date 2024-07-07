@@ -24,12 +24,11 @@ jobs:
           pacman-key --init
           pacman-key --populate
           pacman -Sy archlinux-keyring sudo --noconfirm
-          echo -e "\n[StratOS-repo]\nSigLevel = PackageOptional TrustAll\nServer = https://StratOS-Linux.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
+          echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = https://StratOS-Linux.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
           sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
-          sudo pacman -S git gtk-layer-shell base-devel --needed --noconfirm # gtk-update-icon-cache fd wget ninja qt6-tools base-devel cmake fakeroot github-cli extra-cmake-modules --needed --noconfirm
+          sudo pacman -Sy
+          sudo pacman -S git base-devel --needed --noconfirm # gtk-layer-shell gtk-update-icon-cache fd wget ninja qt6-tools base-devel cmake fakeroot github-cli extra-cmake-modules --needed --noconfirm
           git clone https://github.com/StratOS-Linux/StratOS-repo 
-          
-
 
       - name: Create dummy user for makepkg
         run: |
@@ -47,8 +46,6 @@ jobs:
             sudo pacman-key --recv-keys 90D63B3FE2F217ED
             sudo pacman-key --lsign-key 90D63B3FE2F217ED
             echo -e "trust\n5\ny\nquit" | sudo pacman-key --edit-key 90D63B3FE2F217ED
-
-
 
       - name: Trust GPG key
         run: |
