@@ -51,6 +51,16 @@ jobs:
             cat /etc/makepkg.conf
             sudo -u builder gpg --recv-keys 90D63B3FE2F217ED
 
+
+      - name: Trust GPG key
+        run: |
+            # gpg --edit-key 90D63B3FE2F217ED
+            # trust
+            # 5  # Select trust level (5 is ultimate trust, adjust as needed)
+            # y  # Confirm trust setting
+            # quit
+            echo "5" | gpg --batch --passphrase "" --yes --command-fd 0 --edit-key 90D63B3FE2F217ED trust quit
+
       - name: Build and package software
         run: |  
           dir="$(pwd)"/StratOS-repo
