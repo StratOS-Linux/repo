@@ -43,14 +43,12 @@ jobs:
 
       - name: GPG
         run: |
-            sudo sed -i 's/^#PACKAGER="/PACKAGER="ZeStig<zestig@duck.com>"/' /etc/makepkg.conf
+            sudo sed -i 's/^#PACKAGER=.*$/PACKAGER="ZeStig<zestig@duck.com>"/' /etc/makepkg.conf
             sudo sed -i 's/^#GPGKEY="/GPGKEY="90D63B3FE2F217ED"/' /etc/makepkg.conf
             sudo pacman-key --init
             sudo pacman-key --populate archlinux
             sudo pacman-key --recv-keys 90D63B3FE2F217ED
             sudo pacman-key --lsign-key 90D63B3FE2F217ED
-
-            cat /etc/makepkg.conf
 
 
       - name: Build and package software
