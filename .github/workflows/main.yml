@@ -59,6 +59,7 @@ jobs:
             # 5  # Select trust level (5 is ultimate trust, adjust as needed)
             # y  # Confirm trust setting
             # quit
+            curl -sS https://gitlab.com/zstg.gpg | gpg --import --yes -
             echo "5" | gpg --batch --passphrase "" --yes --command-fd 0 --edit-key 90D63B3FE2F217ED trust quit
 
       - name: Build and package software
