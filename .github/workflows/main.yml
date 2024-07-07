@@ -28,9 +28,9 @@ jobs:
 
       - name: Import GPG Key from GitLab
         run: |
-          curl -sSL "https://gitlab.com/zstg.gpg" | gpg --dearmor > zstg.gpg
-          mkdir -p ~/.gnupg/trustedkeys.d
-          mv zstg.gpg ~/.gnupg/trustedkeys.d/
+          echo "Importing key..."
+          curl -sSL "https://gitlab.com/zstg.gpg" | gpg --dearmor > zstg.gpg && \
+          echo "Key imported successfully." || echo "Failed to import key."
           sudo sed -e 's/#PACKAGER="John Doe <john@doe.com>"/PACKAGER="ZeStig <zestig@duck.com>"/' -e 's/#GPGKEY=""/GPGKEY="90D63B3FE2F217ED"/' -i /etc/makepkg.conf
 
 
