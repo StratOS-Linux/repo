@@ -49,7 +49,7 @@ jobs:
             sudo pacman-key --recv-keys 90D63B3FE2F217ED
             sudo pacman-key --lsign-key 90D63B3FE2F217ED
             cat /etc/makepkg.conf
-
+            sudo -u builder gpg --recv-keys 90D63B3FE2F217ED
 
       - name: Build and package software
         run: |  
