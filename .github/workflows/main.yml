@@ -48,12 +48,7 @@ jobs:
             # sudo -u builder gpg --keyserver keys.openpgp.org --recv-keys 90D63B3FE2F217ED
             sudo pacman-key --recv-keys 90D63B3FE2F217ED
             sudo pacman-key --lsign-key 90D63B3FE2F217ED
-            sudo pacman-key --edit-key 90D63B3FE2F217ED <<EOF
-            trust
-            5
-            y
-            quit
-            EOF
+            echo -e "trust\n5\ny\nquit" | sudo pacman-key --edit-key 90D63B3FE2F217ED
 
 
 
