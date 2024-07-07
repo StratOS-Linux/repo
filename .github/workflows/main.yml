@@ -27,8 +27,8 @@ jobs:
           sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
           sudo pacman -Syy git gtk-update-icon-cache fd wget ninja qt6-tools base-devel cmake fakeroot github-cli extra-cmake-modules --needed --noconfirm
           git clone https://github.com/StratOS-Linux/StratOS-repo 
-          curl -sS https://github.com/elkowar.gpg | gpg --import -i -
-          curl -sS https://github.com/web-flow.gpg | gpg --import -i -
+          curl -sS https://github.com/elkowar.gpg | gpg --import --yes -
+          curl -sS https://github.com/web-flow.gpg | gpg --import --yes -
 
 
       - name: Create dummy user for makepkg
