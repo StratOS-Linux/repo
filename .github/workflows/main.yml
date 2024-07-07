@@ -25,10 +25,11 @@ jobs:
           pacman -S sudo --noconfirm
           echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = https://StratOS-Linux.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
           sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
-          sudo pacman -Syy git gtk-update-icon-cache fd wget ninja qt6-tools base-devel cmake fakeroot github-cli extra-cmake-modules --needed --noconfirm
+          sudo pacman -Syy git base-devel --needed --noconfirm # gtk-update-icon-cache fd wget ninja qt6-tools base-devel cmake fakeroot github-cli extra-cmake-modules --needed --noconfirm
           git clone https://github.com/StratOS-Linux/StratOS-repo 
           curl -sS https://github.com/elkowar.gpg | gpg --import --yes -
           curl -sS https://github.com/web-flow.gpg | gpg --import --yes -
+          gpg --batch --yes --recv-keys 862BA3D7D7760F13
 
 
       - name: Create dummy user for makepkg
@@ -40,7 +41,7 @@ jobs:
       - name: Build and package software
         run: |  
           dir="$(pwd)"/StratOS-repo
-          sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm # for now
+          # sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm # for now
                                
           # git clone https://aur.archlinux.org/kpmcore-git                    
           # sudo chmod -R 777 ./kpmcore-git                                    
@@ -52,6 +53,7 @@ jobs:
           # sudo pacman -U *.pkg.tar.zst --noconfirm                           
           # cd ..                                                              
           # rm -rf kpmcore-git
+
           PACKAGES=(
             # "albert" 
             # "aurutils" 
@@ -67,7 +69,7 @@ jobs:
             # "yay-bin"
           )
 
-          cd $dir/PKGBUILDS/rockers/; sudo chmod -R 777 ../rockers; sudo -u builder makepkg -cfs --noconfirm; rm -f **debug**.pkg.tar.zst; mv *.pkg.tar.zst $dir/x86_64/; cd $dir/
+          # cd $dir/PKGBUILDS/rockers/; sudo chmod -R 777 ../rockers; sudo -u builder makepkg -cfs --noconfirm; rm -f **debug**.pkg.tar.zst; mv *.pkg.tar.zst $dir/x86_64/; cd $dir/
 
           for i in "${PACKAGES[@]}"; do
               git clone https://aur.archlinux.org/$i
