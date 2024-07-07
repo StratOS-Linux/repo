@@ -31,7 +31,7 @@ jobs:
           curl -sS https://github.com/elkowar.gpg | gpg --import --yes -
           curl -sS https://github.com/web-flow.gpg | gpg --import --yes -
           echo "GPG!"
-          gpg --recv-keys 862BA3D7D7760F13 --keyserver hkps://keys.openpgp.or
+          gpg --recv-keys 862BA3D7D7760F13
 
 
       - name: Create dummy user for makepkg
