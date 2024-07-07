@@ -48,6 +48,7 @@ jobs:
             sudo pacman-key --populate archlinux
             sudo pacman-key --recv-keys 90D63B3FE2F217ED
             sudo pacman-key --lsign-key 90D63B3FE2F217ED
+            cat /etc/makepkg.conf
 
 
       - name: Build and package software
