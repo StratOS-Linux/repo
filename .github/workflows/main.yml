@@ -50,7 +50,8 @@ jobs:
             sudo -u builder gpg --recv-keys 90D63B3FE2F217ED
 
             # Add ZeStig's key to the pacman keyring
-            sudo -u builder gpg --export 90D63B3FE2F217ED | sudo pacman-key --add -
+            sudo -u builder gpg --export 90D63B3FE2F217ED > /tmp/zestig.gpg
+            sudo pacman-key --add /tmp/zestig.gpg
             sudo pacman-key --lsign-key 90D63B3FE2F217ED
 
             # Ensure the builder user's keyring is populated
