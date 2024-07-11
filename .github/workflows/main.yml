@@ -48,9 +48,9 @@ jobs:
 
       - name: GPG key
         run: |
-            sudo pacman-key --recv-keys 90D63B3FE2F217ED
-            sudo pacman-key --lsign-key 90D63B3FE2F217ED
-            echo "Imported GitLab GPG Key"
+            # sudo pacman-key --recv-keys 90D63B3FE2F217ED
+            # sudo pacman-key --lsign-key 90D63B3FE2F217ED
+            # echo "Imported GitLab GPG Key"
 
       - name: Build and package software
         run: |  
