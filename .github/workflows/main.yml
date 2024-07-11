@@ -47,15 +47,15 @@ jobs:
             # sudo -u builder gpg --recv-keys 90D63B3FE2F217ED
 
             # Export ZeStig's key to a file and add to pacman keyring
-            sudo -u builder curl -sS https://gitlab.com/zstg.gpg | gpg --import --yes -
+            # sudo -u builder curl -sS https://gitlab.com/zstg.gpg | gpg --import --yes -
             sudo pacman-key --recv-keys 90D63B3FE2F217ED
-            sudo -u builder gpg --export 90D63B3FE2F217ED > /tmp/zestig.gpg
-            sudo pacman-key --add /tmp/zestig.gpg
+            # sudo -u builder gpg --export 90D63B3FE2F217ED > /tmp/zestig.gpg
+            # sudo pacman-key --add /tmp/zestig.gpg
             sudo pacman-key --lsign-key 90D63B3FE2F217ED
 
             # Ensure the builder user's keyring is populated
-            sudo -u builder mkdir -p /home/builder/.gnupg
-            echo "90D63B3FE2F217ED:6:" | sudo -u builder gpg --import-ownertrust
+            # sudo -u builder mkdir -p /home/builder/.gnupg
+            # echo "90D63B3FE2F217ED:6:" | sudo -u builder gpg --import-ownertrust
 
             echo "Imported GitLab GPG Key"
 
