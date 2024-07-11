@@ -43,14 +43,20 @@ jobs:
             sudo -u builder curl -sS https://github.com/elkowar.gpg | gpg --import --yes -
             sudo -u builder curl -sS https://github.com/web-flow.gpg | gpg --import --yes -
             echo "GPG!"
-            sudo -u builder gpg --recv-keys 862BA3D7D7760F13
+            sudo -u builder curl -sS https://github.com/elkowar.gpg | gpg --import --yes -
+            sudo -u builder curl -sS https://github.com/web-flow.gpg | gpg --import --yes -
+            # sudo -u builder gpg --recv-keys 862BA3D7D7760F13
             sudo -u builder gpg --recv-keys 90D63B3FE2F217ED
-            sudo pacman-key --init
-            sudo pacman-key --populate archlinux
+
+            # Add ZeStig's key to the pacman keyring
             sudo -u builder gpg --export 90D63B3FE2F217ED | sudo pacman-key --add -
             sudo pacman-key --lsign-key 90D63B3FE2F217ED
-            echo "Imported GitLab GPG Key"
 
+            # Ensure the builder user's keyring is populated
+            sudo -u builder mkdir -p /home/builder/.gnupg
+            sudo -u builder gpg --import-ownertrust <(echo -e "90D63B3FE2F217ED:6:\n")
+            sudo -u builder gpg --export 90D63B3FE2F217ED | sudo -u builder gpg --import
+            
       - name: Build and package software
         run: |  
           dir="$(pwd)"/StratOS-repo
