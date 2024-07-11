@@ -45,10 +45,11 @@ jobs:
             sudo -u builder curl -sS https://github.com/web-flow.gpg | gpg --import --yes -
             # sudo -u builder curl -sS https://gitlab.com/zstg.gpg | gpg --import --yes -
 
+
+      - name: GPG key
+        run: |
             sudo pacman-key --recv-keys 90D63B3FE2F217ED
-            # sudo -u builder gpg --export 90D63B3FE2F217ED > /tmp/zestig.gpg
-            # sudo pacman-key --add /tmp/zestig.gpg
-            # sudo pacman-key --lsign-key 90D63B3FE2F217ED
+            sudo pacman-key --lsign-key 90D63B3FE2F217ED
             echo "Imported GitLab GPG Key"
 
       - name: Build and package software
@@ -59,7 +60,7 @@ jobs:
           git clone https://aur.archlinux.org/kpmcore-git                    
           sudo chmod -R 777 ./kpmcore-git                                    
           cd kpmcore-git                                                     
-          sudo -u builder makepkg -cfs --sign --noconfirm                           
+          sudo -u builder makepkg -cfs --noconfirm                           
           rm -f **debug**.pkg.tar.zst                 
           cp *.pkg.tar.zst $dir/x86_64/                                      
           cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
@@ -86,7 +87,7 @@ jobs:
               sudo chmod -R 777 ./$i
               cd $i
               cp PKGBUILD $dir/PKGBUILDS/$i/PKGBUILD
-              sudo -u builder makepkg -cfs --sign --noconfirm
+              sudo -u builder makepkg -cfs --noconfirm
               rm -rf $dir/x86_64/"$i"**.pkg.tar.zst
               mv *.pkg.tar.zst $dir/x86_64/
               cd ..
