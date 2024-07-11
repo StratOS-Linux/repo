@@ -29,8 +29,10 @@ jobs:
       - name: Import GPG Key from GitLab
         run: |
           echo "Importing key..."
-          curl -sSL "https://gitlab.com/zstg.gpg" | gpg --dearmor > zstg.gpg && \
-          echo "Key imported successfully." || echo "Failed to import key."
+          curl -sSL "https://gitlab.com/zstg.gpg" | gpg --dearmor > zstg.gpg && echo "Key imported successfully." || echo "Failed to import key."
+          pacman-key --init
+          pacman-key --populate
+          pacman-key --add zstg.gpg
           sudo sed -e 's/#PACKAGER="John Doe <john@doe.com>"/PACKAGER="ZeStig <zestig@duck.com>"/' -e 's/#GPGKEY=""/GPGKEY="90D63B3FE2F217ED"/' -i /etc/makepkg.conf
 
 
@@ -45,13 +47,6 @@ jobs:
             sudo -u builder curl -sS https://github.com/web-flow.gpg | gpg --import --yes -
             # sudo -u builder curl -sS https://gitlab.com/zstg.gpg | gpg --import --yes -
 
-
-      - name: GPG key
-        run: |
-            # sudo pacman-key --recv-keys 90D63B3FE2F217ED
-            # sudo pacman-key --lsign-key 90D63B3FE2F217ED
-            # echo "Imported GitLab GPG Key"
-
       - name: Build and package software
         run: |  
           dir="$(pwd)"/StratOS-repo
@@ -60,7 +55,7 @@ jobs:
           git clone https://aur.archlinux.org/kpmcore-git                    
           sudo chmod -R 777 ./kpmcore-git                                    
           cd kpmcore-git                                                     
-          sudo -u builder makepkg -cfs --noconfirm                           
+          sudo -u builder makepkg -cfs --noconfirm --sign                  
           rm -f **debug**.pkg.tar.zst                 
           cp *.pkg.tar.zst $dir/x86_64/                                      
           cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
