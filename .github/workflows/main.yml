@@ -36,6 +36,7 @@ jobs:
 
       - name: Create dummy user for makepkg
         run: |
+            pacman-key --init && pacman-key --populate archlinux
             sudo useradd -m builder -s /bin/bash
             sudo usermod -aG wheel builder
             echo '%wheel ALL=(ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers
@@ -56,7 +57,7 @@ jobs:
             sudo -u builder mkdir -p /home/builder/.gnupg
             sudo -u builder gpg --import-ownertrust <(echo -e "90D63B3FE2F217ED:6:\n")
             sudo -u builder gpg --export 90D63B3FE2F217ED | sudo -u builder gpg --import
-            
+
       - name: Build and package software
         run: |  
           dir="$(pwd)"/StratOS-repo
