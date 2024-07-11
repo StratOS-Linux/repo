@@ -56,8 +56,9 @@ jobs:
 
             # Ensure the builder user's keyring is populated
             sudo -u builder mkdir -p /home/builder/.gnupg
-            sudo -u builder gpg --import-ownertrust < /tmp/zestig.gpg
-            sudo -u builder gpg --export 90D63B3FE2F217ED | gpg --import
+            # sudo -u builder gpg --import-ownertrust < /tmp/zestig.gpg
+            echo "90D63B3FE2F217ED:6:" | sudo -u builder gpg --import-ownertrust
+            # sudo -u builder gpg --export 90D63B3FE2F217ED | gpg --import
 
       - name: Build and package software
         run: |  
