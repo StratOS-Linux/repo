@@ -45,7 +45,8 @@ jobs:
             echo "GPG!"
             sudo -u builder gpg --recv-keys 862BA3D7D7760F13
             sudo -u builder gpg --recv-keys 90D63B3FE2F217ED
-            gpg --recv-keys 90D63B3FE2F217ED
+            sudo -u builder gpg --export 90D63B3FE2F217ED | sudo pacman-key --add -
+            sudo pacman-key --lsign-key 90D63B3FE2F217ED
             echo "Imported GitLab GPG Key"
 
       - name: Build and package software
