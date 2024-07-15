@@ -43,8 +43,8 @@ jobs:
             sudo usermod -aG wheel builder
             echo '%wheel ALL=(ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers
             echo "Keys!"
-            sudo -u builder curl -sS https://github.com/elkowar.gpg | gpg --import --yes -
-            sudo -u builder curl -sS https://github.com/web-flow.gpg | gpg --import --yes -
+            sudo -u builder curl -sS https://github.com/elkowar.gpg | gpg --dearmor > elkowar.gpg && pacman-key --add elkowar.gpg
+            sudo -u builder curl -sS https://github.com/web-flow.gpg | gpg --dearmor > web-flow.gpg && pacman-key --add web-flow.gpg
             # sudo -u builder curl -sS https://gitlab.com/zstg.gpg | gpg --import --yes -
 
       - name: Build and package software
