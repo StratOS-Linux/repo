@@ -55,7 +55,7 @@ jobs:
           git clone https://aur.archlinux.org/kpmcore-git                    
           sudo chmod -R 777 ./kpmcore-git                                    
           cd kpmcore-git                                                     
-          sudo -u builder makepkg -cfs --noconfirm --sign                  
+          sudo -u builder makepkg -cfs --noconfirm # --sign                  
           rm -f **debug**.pkg.tar.zst                 
           cp *.pkg.tar.zst $dir/x86_64/                                      
           cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
@@ -76,7 +76,7 @@ jobs:
             "ventoy-bin" 
             "yay-bin"
           )
-          cd $dir/PKGBUILDS/rockers/; sudo chmod -R 777 ../rockers; sudo -u builder makepkg -cfs --sign --noconfirm; rm -f **debug**.pkg.tar.zst; mv *.pkg.tar.zst $dir/x86_64/; cd $dir/
+          cd $dir/PKGBUILDS/rockers/; sudo chmod -R 777 ../rockers; sudo -u builder makepkg -cfs --noconfirm; rm -f **debug**.pkg.tar.zst; mv *.pkg.tar.zst $dir/x86_64/; cd $dir/
           for i in "${PACKAGES[@]}"; do
               git clone https://aur.archlinux.org/$i
               sudo chmod -R 777 ./$i
