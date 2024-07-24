@@ -63,18 +63,18 @@ jobs:
           cd ..                                                              
           rm -rf kpmcore-git
           PACKAGES=(
-            "albert" 
-            "aurutils" 
-            "bibata-cursor-theme-bin"
+            # "albert" 
+            # "aurutils" 
+            # "bibata-cursor-theme-bin"
             "calamares-git" 
             "eww"
-            "gruvbox-plus-icon-theme-git" 
-            "libadwaita-without-adwaita-git" 
-            "mkinitcpio-openswap" 
-            "nwg-dock-hyprland" 
-            "pandoc-bin" 
-            "ventoy-bin" 
-            "yay-bin"
+            # "gruvbox-plus-icon-theme-git" 
+            # "libadwaita-without-adwaita-git" 
+            # "mkinitcpio-openswap" 
+            # "nwg-dock-hyprland" 
+            # "pandoc-bin" 
+            # "ventoy-bin" 
+            # "yay-bin"
           )
           cd $dir/PKGBUILDS/rockers/; sudo chmod -R 777 ../rockers; sudo -u builder makepkg -cfs --noconfirm; rm -f **debug**.pkg.tar.zst; mv *.pkg.tar.zst $dir/x86_64/; cd $dir/
           for i in "${PACKAGES[@]}"; do
