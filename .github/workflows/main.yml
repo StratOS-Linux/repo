@@ -115,9 +115,9 @@ jobs:
         - name: Upload artifact
           uses: actions/upload-pages-artifact@v3
           with:
-              path: ./_site
+            path: ./_site
 
-    deploy:
+  deploy:
       permissions: 
         id-token: write
         contents: write
