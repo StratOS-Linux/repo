@@ -63,18 +63,18 @@ jobs:
           cd ..                                                              
           rm -rf kpmcore-git
           PACKAGES=(
-            # "albert" 
-            # "aurutils" 
+            "albert" 
+            "aurutils" 
             "bibata-cursor-theme-bin"
-            # "calamares-git" 
+            "calamares-git" 
             # "eww"
-            # "gruvbox-plus-icon-theme-git" 
-            # "libadwaita-without-adwaita-git" 
-            # "mkinitcpio-openswap" 
-            # "nwg-dock-hyprland" 
-            # "pandoc-bin" 
-            # "ventoy-bin" 
-            # "yay-bin"
+            "gruvbox-plus-icon-theme-git" 
+            "libadwaita-without-adwaita-git" 
+            "mkinitcpio-openswap" 
+            "nwg-dock-hyprland" 
+            "pandoc-bin" 
+            "ventoy-bin" 
+            "yay-bin"
           )
           cd $dir/PKGBUILDS/rockers/; sudo chmod -R 777 ../rockers; sudo -u builder makepkg -cfs --noconfirm; rm -f **debug**.pkg.tar.zst; mv *.pkg.tar.zst $dir/x86_64/; cd $dir/
           for i in "${PACKAGES[@]}"; do
@@ -100,3 +100,40 @@ jobs:
             git add .
             git commit -am "Update packages"
             git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/StratOS-Linux/StratOS-repo.git"
+
+  website:
+      needs: build
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Build Jekyll site
+          uses: actions/jekyll-build-pages@v1
+
+        - name: Upload artifact
+          uses: actions/upload-pages-artifact@v3
+          with:
+              path: ./_site
+
+    deploy:
+      permissions: 
+        id-token: write
+        contents: write
+        pull-requests: write
+        repository-projects: write
+        pages: write
+      needs: website
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Deploy to GitHub Pages
+          id: deployment
+          uses: actions/deploy-pages@v4
+          with:
+            token: ${{secrets.GITHUB_TOKEN}}
+
+      environment:
+        name: github-pages
+        url: ${{ steps.deployment.outputs.page_url }}
