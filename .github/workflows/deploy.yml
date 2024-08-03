@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Build packages via Docker
         run: |
-          docker compose up -f .gitpod.Dockerfile
+          docker compose -f .gitpod.Dockerfile up
 
   website:
       needs: build
