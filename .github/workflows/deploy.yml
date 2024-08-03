@@ -15,8 +15,7 @@ jobs:
     steps:
       - name: Build packages via Docker
         run: |
-          sudo apt -y update
-          docker compose up
+          docker compose up -f .gitpod.Dockerfile
 
   website:
       needs: build
