@@ -72,13 +72,13 @@ build_and_package() {
     # mv *.pkg.tar.zst $dir/x86_64/
     # cd $dir/
 
-    mkdir -p /tmp/litefm && chmod -R 777 /tmp/litefm
-    cp $dir/PKGBUILDS/litefm/PKGBUILD /tmp/litefm
-    cd /tmp/litefm
-    rm -f $dir/x86_64/**litefm**.pkg.tar.zst
-    sudo -u builder makepkg -cfs --noconfirm
-    mv *.pkg.tar.zst $dir/x86_64/
-    cd $dir
+    # mkdir -p /tmp/litefm && chmod -R 777 /tmp/litefm
+    # cp $dir/PKGBUILDS/litefm/PKGBUILD /tmp/litefm
+    # cd /tmp/litefm
+    # rm -f $dir/x86_64/**litefm**.pkg.tar.zst
+    # sudo -u builder makepkg -cfs --noconfirm
+    # mv *.pkg.tar.zst $dir/x86_64/
+    # cd $dir
 
 
     local packages=(
@@ -120,8 +120,8 @@ initialize_and_push() {
     git config --global user.name 'github-actions[bot]'
     git config --global user.email 'github-actions[bot]@users.noreply.github.com'
     git add .
-    # git commit -am "Update packages"
-    # git push "https://x-access-token:${GITHUB_TOKEN}@github.com/zstg/StratOS-repo.git"
+    git commit -am "Update packages"
+    git push "https://x-access-token:${GITHUB_TOKEN}@github.com/zstg/StratOS-repo.git"
 }
 
 # Main function

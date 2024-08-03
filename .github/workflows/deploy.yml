@@ -1,9 +1,10 @@
 name: Build and Deploy Packages
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+    # branches:
+      # - main
+  workflow_dispatch: 
 
 jobs:
   build:
@@ -15,7 +16,7 @@ jobs:
     steps:
       - name: Build packages via Docker
         run: |
-          docker compose -f .gitpod.Dockerfile up
+          docker compose up
 
   website:
       needs: build

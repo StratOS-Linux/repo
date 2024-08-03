@@ -1,10 +1,10 @@
 services:
   app:
     build:
-      context: .  # Build context is the current directory
-      dockerfile: .gitpod.Dockerfile  # Specify the Dockerfile since it's named differently
+      context: .
+      dockerfile: .gitpod.Dockerfile
     environment:
-      GITHUB_TOKEN: ${GITHUB_TOKEN}  # Use the environment variable for GITHUB_TOKEN
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
     volumes:
       - .:/workspace  # Mount the current directory to /workspace
     command: bash /workspace/build.sh 
