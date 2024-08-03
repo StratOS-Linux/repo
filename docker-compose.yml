@@ -1,0 +1,10 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: .gitpod.Dockerfile
+    environment:
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+    volumes:
+      - .:/workspace  # Mount the current directory to /workspace
+    command: bash /workspace/build.sh 

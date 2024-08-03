@@ -1,0 +1,37 @@
+# Maintainer: Siddharth Karanam <your.email@example.com>
+
+pkgname=litefm
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Fast file manager written in C for UNIX systems"
+arch=('x86_64')
+url="https://github.com/nots1dd/litefm"
+license=('GPL-3.0-or-later')
+depends=('ncurses' 'libarchive')
+makedepends=('cmake' 'make')
+optdepends=('wl-clip: clipboard support on Wayland' 'xclip: clipboard support on X11')
+# sha256sums=('SKIP')
+provides=('litefm')
+conflicts=('litefm')
+
+build() {
+    git clone "$url"
+    cd "$pkgname"
+    cmake -DCMAKE_COMPILE_WARNING_AS_ERROR=ON -S . -B build/
+    cmake --build build/
+}
+
+package() {
+    cd "$pkgname/build"
+    install -Dm755 "litefm" "$pkgdir/usr/bin/litefm"
+    install -Dm755 "lfm" "$pkgdir/usr/bin/litefm"
+    
+    # man page
+    install -Dm644 "../components/litefm.1" "$pkgdir/usr/share/man/man1/litefm.1"
+    gzip "$pkgdir/usr/share/man/man1/litefm.1"    
+}
+
+# Optional: Add a post-install message
+post_install() {
+    echo "Please restart your terminal or source your shell configuration file to use the litefm command."
+}
