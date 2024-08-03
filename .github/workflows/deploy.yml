@@ -15,7 +15,9 @@ jobs:
     steps:
       - name: Build packages via Docker
         run: |
-          docker-compose up
+          sudo apt -y update
+          sudo apt install -y docker-compose-v2 
+          docker compose up
 
   website:
       needs: build
