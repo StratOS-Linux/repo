@@ -116,11 +116,11 @@ build_and_package() {
 initialize_and_push() {
     cd $dir
     bash ./initialize.sh
-    git config --global user.name 'github-actions[bot]'
-    git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-    git add .
-    git commit -am "Update packages"
-    git push "https://x-access-token:${GITHUB_TOKEN}@github.com/zstg/StratOS-repo.git"
+    sudo git config --global user.name 'github-actions[bot]'
+    sudo git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+    sudo git add .
+    sudo git commit -am "Update packages"
+    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/zstg/StratOS-repo.git"
 }
 
 # Main function
