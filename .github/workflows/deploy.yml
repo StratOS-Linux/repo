@@ -1,0 +1,59 @@
+name: Build and Deploy Packages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+    steps:
+      - name: Build packages via Docker
+        run: |
+          docker-compose up
+
+  website:
+      needs: build
+      permissions: 
+        contents: write
+        pull-requests: write
+        repository-projects: write
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Build Jekyll site
+          uses: actions/jekyll-build-pages@v1
+
+        - name: Upload artifact
+          uses: actions/upload-pages-artifact@v3
+          with:
+            path: ./_site
+
+  deploy:
+      permissions: 
+        id-token: write
+        contents: write
+        pull-requests: write
+        repository-projects: write
+        pages: write
+      needs: website
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Deploy to GitHub Pages
+          id: deployment
+          uses: actions/deploy-pages@v4
+          with:
+            token: ${{secrets.GITHUB_TOKEN}}
+
+      environment:
+        name: github-pages
+        url: ${{ steps.deployment.outputs.page_url }}

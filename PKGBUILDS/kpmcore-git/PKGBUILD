@@ -1,7 +1,7 @@
 # Maintainer: Gustavo Alvarez <sl1pkn07@gmail.com>
 
 pkgname=kpmcore-git
-pkgver=24.11.70.r1568.21abcf8
+pkgver=24.11.70.r1569.a013ebd
 pkgrel=1
 pkgdesc='Library for managing partitions. Common code for KDE Partition Manager and other projects. (GIT version)'
 arch=('x86_64')

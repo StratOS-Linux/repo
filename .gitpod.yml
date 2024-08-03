@@ -4,5 +4,4 @@ image:
 tasks:
   - name: Build and Deploy
     command: |
-      # source /workspace/.env && bash /workspace/build.sh
       docker-compose up

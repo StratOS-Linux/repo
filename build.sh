@@ -8,7 +8,7 @@ handle_error() {
 
 # Trap errors
 trap 'handle_error $LINENO' ERR
-
+[ -d /workspace ] && git config --global --add safe.directory /workspace
 # Set up Arch Linux environment
 setup_environment() {
     sudo pacman -Syu --noconfirm
@@ -16,6 +16,7 @@ setup_environment() {
     echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = https://StratOS-Linux.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
     sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
     sudo pacman -Syy git gtk-layer-shell base-devel --needed --noconfirm
+    git config --global --add safe.directory /workspace
     # git clone https://github.com/zstg/StratOS-repo
 }
 
@@ -41,7 +42,7 @@ create_dummy_user() {
 
 # Build and package software
 build_and_package() {
-    local dir="$(pwd)" # /StratOS-repo"
+    local dir="$(pwd)"
     # sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm
 
     # git clone https://aur.archlinux.org/kpmcore-git
@@ -49,32 +50,55 @@ build_and_package() {
     # cd kpmcore-git
     # sudo -u builder makepkg -cfs --noconfirm # --sign
     # rm -f **debug**.pkg.tar.zst
+    # rm -f $dir/x86_64/**kpmcore**.pkg.tar.zst
     # cp *.pkg.tar.zst $dir/x86_64/
     # cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
     # sudo pacman -U *.pkg.tar.zst --noconfirm
     # cd ..
     # rm -rf kpmcore-git
 
-    local packages=(
-        # "albert" 
-        # "aurutils" 
-        # "bibata-cursor-theme-bin"
-        # "calamares-git" 
-        # "eww"
-        # "gruvbox-plus-icon-theme-git" 
-        # "libadwaita-without-adwaita-git" 
-        # "mkinitcpio-openswap" 
-        # "nwg-dock-hyprland" 
-        # "pandoc-bin" 
-        # "ventoy-bin" 
-        "yay-bin"
-    )
-    cd $dir/PKGBUILDS/rockers/
-    sudo chmod -R 777 ../rockers
+    cd $dir/PKGBUILDS/ckbcomp/
+    sudo chmod -R 777 ../ckbcomp
     sudo -u builder makepkg -cfs --noconfirm
     rm -f **debug**.pkg.tar.zst
+    rm -f $dir/x86_64/ckbcomp**.pkg.tar.zst
+    mv -f *.pkg.tar.zst $dir/x86_64/
+    mv $dir/PKGBUILDS/ckbcomp/PKGBUILD /tmp && rm -rf $dir/PKGBUILDS/ckbcomp/* && mv /tmp/PKGBUILD $dir/PKGBUILDS/ckbcomp
+
+    # cd $dir/PKGBUILDS/rockers/
+    # sudo chmod -R 777 ../rockers
+    # sudo -u builder makepkg -cfs --noconfirm
+    # rm -f **debug**.pkg.tar.zst
+    # mv *.pkg.tar.zst $dir/x86_64/
+    # cd $dir/
+
+    mkdir -p /tmp/litefm && chmod -R 777 /tmp/litefm
+    cp $dir/PKGBUILDS/litefm/PKGBUILD /tmp/litefm
+    cd /tmp/litefm
+    rm -f $dir/x86_64/**litefm**.pkg.tar.zst
+    sudo -u builder makepkg -cfs --noconfirm
     mv *.pkg.tar.zst $dir/x86_64/
-    cd $dir/
+    cd $dir
+
+
+    local packages=(
+        "albert" 
+        "aurutils" 
+        "bibata-cursor-theme-bin"
+        "calamares-git" 
+        # "eww"
+        "gruvbox-plus-icon-theme-git" 
+        "libadwaita-without-adwaita-git" 
+        "mkinitcpio-openswap" 
+        "nwg-dock-hyprland" 
+        "pandoc-bin" 
+        "python-clickgen"
+        "rua"
+        # "swayosd-git"
+        "ventoy-bin" 
+        "yay-bin"
+    )
+
     for i in "${packages[@]}"; do
         git clone https://aur.archlinux.org/$i
         sudo chmod -R 777 ./$i
@@ -95,9 +119,9 @@ initialize_and_push() {
     bash ./initialize.sh
     git config --global user.name 'github-actions[bot]'
     git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-    #git add .
-    #git commit -am "Update packages"
-    #git push "https://x-access-token:${GITHUB_TOKEN}@github.com/zstg/StratOS-repo.git"
+    git add .
+    # git commit -am "Update packages"
+    # git push "https://x-access-token:${GITHUB_TOKEN}@github.com/zstg/StratOS-repo.git"
 }
 
 # Main function
@@ -106,12 +130,12 @@ main() {
     import_gpg_key
     create_dummy_user
     build_and_package
-    # initialize_and_push
+    initialize_and_push
 }
 
 # Ensure GITHUB_TOKEN is set
 if [ -z "$GITHUB_TOKEN" ]; then
-    echo "GITHUB_TOKEN is not set. Please set it before running this script."
+    echo "GITHUB_TOKEN is not set. Please set it - following the instructions in README.md - before running this script."
     exit 1
 fi
 
