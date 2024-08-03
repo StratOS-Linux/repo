@@ -42,7 +42,7 @@ create_dummy_user() {
 
 # Build and package software
 build_and_package() {
-    local dir="$(pwd)"
+    dir="$(pwd)"
     # sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm
 
     # git clone https://aur.archlinux.org/kpmcore-git
@@ -114,7 +114,6 @@ build_and_package() {
 
 # Initialize and push to GitHub
 initialize_and_push() {
-    local dir="$(pwd)/StratOS-repo"
     cd $dir
     bash ./initialize.sh
     git config --global user.name 'github-actions[bot]'
