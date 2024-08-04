@@ -11,10 +11,11 @@ trap 'handle_error $LINENO' ERR
 [ -d /workspace ] && git config --global --add safe.directory /workspace
 # Set up Arch Linux environment
 setup_environment() {
-    sudo pacman -Syu --noconfirm
-    sudo pacman -S sudo --noconfirm
+    sudo pacman -Syu sudo --noconfirm
     echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = https://StratOS-Linux.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
     sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
+    sudo sed -i 's/^#* *GPGKEY *=.*/GPGKEY="19A421C3D15C8B7C672F0FACC4B8A73AB86B9411"/' /etc/makepkg.conf # add StratOS public key
+    sed -i 's/^#*\(PACKAGER=\).*/\1"StratOS team <stratos-linux@gmail.com>"/' /etc/makepkg.conf
     sudo pacman -Syy git gtk-layer-shell base-devel --needed --noconfirm
     git config --global --add safe.directory /workspace
     # git clone https://github.com/zstg/StratOS-repo
@@ -23,10 +24,13 @@ setup_environment() {
 # Import GPG Key from GitLab
 import_gpg_key() {
     echo "Importing key..."
-    curl -sSL "https://gitlab.com/zstg.gpg" | gpg --dearmor > zstg.gpg && echo "Key imported successfully." || echo "Failed to import key."
+    mkdir -p ~/.gnupg/
+    echo -e 'default-cache-ttl 34560000\nmax-cache-ttl 34560000' > ~/.gnupg/gpg-agent.conf
+    gpg-agent --daemon --use-standard-socket --allow-preset-passphrase
+    echo "Radiantly2-Cable8-Headdress6-Resisting8-Affirm0" | gpg --batch --yes --passphrase-fd 0 stratos-public-key.gpg
+    sudo pacman-key --add stratos-public-key.gpg
     sudo pacman-key --init
     sudo pacman-key --populate
-    # sudo pacman-key --add zstg.gpg
 }
 
 # Create dummy user for makepkg
@@ -37,7 +41,7 @@ create_dummy_user() {
     echo '%wheel ALL=(ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers
     sudo -u builder curl -sS https://github.com/elkowar.gpg | gpg --dearmor > elkowar.gpg && sudo pacman-key --add elkowar.gpg
     sudo -u builder curl -sS https://github.com/web-flow.gpg | gpg --dearmor > web-flow.gpg && sudo pacman-key --add web-flow.gpg
-    # sudo -u builder curl -sS https://gitlab.com/zstg.gpg | gpg --import --yes -
+    sudo -u builder gpg --import --batch stratos-public-key.gpg
 }
 
 # Build and package software
@@ -59,7 +63,7 @@ build_and_package() {
 
     cd $dir/PKGBUILDS/ckbcomp/
     sudo chmod -R 777 ../ckbcomp
-    sudo -u builder makepkg -cfs --noconfirm
+    sudo -u builder makepkg -cfs --sign --noconfirm
     rm -f **debug**.pkg.tar.zst
     rm -f $dir/x86_64/ckbcomp**.pkg.tar.zst
     mv -f *.pkg.tar.zst $dir/x86_64/
@@ -67,7 +71,7 @@ build_and_package() {
 
     # cd $dir/PKGBUILDS/rockers/
     # sudo chmod -R 777 ../rockers
-    # sudo -u builder makepkg -cfs --noconfirm
+    # sudo -u builder makepkg -cfs --sign --noconfirm
     # rm -f **debug**.pkg.tar.zst
     # mv *.pkg.tar.zst $dir/x86_64/
     # cd $dir/
@@ -76,27 +80,27 @@ build_and_package() {
     # cp $dir/PKGBUILDS/litefm/PKGBUILD /tmp/litefm
     # cd /tmp/litefm
     # rm -f $dir/x86_64/**litefm**.pkg.tar.zst
-    # sudo -u builder makepkg -cfs --noconfirm
+    # sudo -u builder makepkg -cfs --sign --noconfirm
     # mv *.pkg.tar.zst $dir/x86_64/
     # cd $dir
 
 
     local packages=(
-        "albert" 
-        "aurutils" 
-        "bibata-cursor-theme-bin"
-        "calamares-git" 
+        # "albert" 
+        # "aurutils" 
+        # "bibata-cursor-theme-bin"
+        # "calamares-git" 
         # "eww"
-        "gruvbox-plus-icon-theme-git" 
-        "libadwaita-without-adwaita-git" 
-        "mkinitcpio-openswap" 
-        "nwg-dock-hyprland" 
+        # "gruvbox-plus-icon-theme-git" 
+        # "libadwaita-without-adwaita-git" 
+        # "mkinitcpio-openswap" 
+        # "nwg-dock-hyprland" 
         "pandoc-bin" 
-        "python-clickgen"
-        "rua"
+        # "python-clickgen"
+        # "rua"
         # "swayosd-git"
-        "ventoy-bin" 
-        "yay-bin"
+        # "ventoy-bin" 
+        # "yay-bin"
     )
 
     for i in "${packages[@]}"; do
@@ -104,7 +108,7 @@ build_and_package() {
         sudo chmod -R 777 ./$i
         cd $i
         cp PKGBUILD $dir/PKGBUILDS/$i/PKGBUILD
-        sudo -u builder makepkg -cfs --noconfirm
+        sudo -u builder makepkg -cfs --sign --noconfirm
         rm -rf $dir/x86_64/"$i"**.pkg.tar.zst
         mv *.pkg.tar.zst $dir/x86_64/
         cd ..
@@ -120,7 +124,7 @@ initialize_and_push() {
     sudo git config --global user.email 'github-actions[bot]@users.noreply.github.com'
     sudo git add .
     sudo git commit -am "Update packages"
-    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/zstg/StratOS-repo.git"
+    # sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/StratOS-Linux/StratOS-repo.git"
 }
 
 # Main function
