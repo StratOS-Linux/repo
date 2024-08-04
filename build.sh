@@ -27,6 +27,7 @@ import_gpg_key() {
     mkdir -p ~/.gnupg/
     echo -e 'default-cache-ttl 34560000\nmax-cache-ttl 34560000' > ~/.gnupg/gpg-agent.conf
     gpg-agent --daemon --use-standard-socket --allow-preset-passphrase
+    gpg --recv-keys 19A421C3D15C8B7C672F0FACC4B8A73AB86B9411
     echo "Radiantly2-Cable8-Headdress6-Resisting8-Affirm0" | gpg --batch --yes --passphrase-fd 0 stratos-public-key.gpg
     sudo pacman-key --add stratos-public-key.gpg
     sudo pacman-key --init
@@ -42,6 +43,8 @@ create_dummy_user() {
     sudo -u builder curl -sS https://github.com/elkowar.gpg | gpg --dearmor > elkowar.gpg && sudo pacman-key --add elkowar.gpg
     sudo -u builder curl -sS https://github.com/web-flow.gpg | gpg --dearmor > web-flow.gpg && sudo pacman-key --add web-flow.gpg
     sudo -u builder gpg --import --batch stratos-public-key.gpg
+    sudo -u builder gpg --recv-keys 19A421C3D15C8B7C672F0FACC4B8A73AB86B9411
+
 }
 
 # Build and package software
