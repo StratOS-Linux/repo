@@ -1,0 +1,25 @@
+pkgname=stratos-keyring
+pkgver=20240804
+pkgrel=1
+pkgdesc='StratOS keyring'
+arch=('x86_64')
+url='https://stratos-linux.github.io'
+license=('GPL')
+install="${pkgname}.install"
+source=('https://raw.githubusercontent.com/stratos-linux/keyring/main/Makefile'
+        'https://raw.githubusercontent.com/stratos-linux/keyring/main/stratos.gpg'
+        'https://raw.githubusercontent.com/stratos-linux/keyring/main/stratos-revoked'
+        'https://raw.githubusercontent.com/stratos-linux/keyring/main/stratos-trusted')
+validpgpkeys=('A046BE254138E0AC1BF5F66690D63B3FE2F217ED'  # zstg
+              'E5DD2FBFBE1220AD286E520D5B580B865EA3FD8A'  # mgtn
+              '19A421C3D15C8B7C672F0FACC4B8A73AB86B9411'  # stratos
+              )
+sha512sums=('SKIP'
+           'SKIP'
+           'SKIP'
+           'SKIP')
+
+package() {
+	cd "${srcdir}"
+	make PREFIX=/usr DESTDIR="${pkgdir}" install
+}

@@ -24,19 +24,20 @@ setup_environment() {
 # Import GPG Key from GitLab
 import_gpg_key() {
     echo "Importing key..."
-    mkdir -p ~/.gnupg/
-    echo -e 'default-cache-ttl 34560000\nmax-cache-ttl 34560000' > ~/.gnupg/gpg-agent.conf
-    gpg-agent --daemon --use-standard-socket --allow-preset-passphrase
     gpg --recv-keys 19A421C3D15C8B7C672F0FACC4B8A73AB86B9411
-    echo "Radiantly2-Cable8-Headdress6-Resisting8-Affirm0" | gpg --batch --yes --passphrase-fd 0 stratos-public-key.gpg
-    sudo pacman-key --add 19A421C3D15C8B7C672F0FACC4B8A73AB86B9411
     sudo pacman-key --init
-    sudo pacman-key --populate
+    sudo pacman-key --populate archlinux
+    ## sudo pacman-key --add stratos-public-key.gpg # not reqd since key is public, recv will do
+    sudo pacman-key --lsign-key 19A421C3D15C8B7C672F0FACC4B8A73AB86B9411
+    echo -e 'default-cache-ttl 34560000\nmax-cache-ttl 34560000' > ~/.gnupg/gpg-agent.conf
+    sudo pkill gpg-agent
+    gpg-agent --daemon --use-standard-socket --allow-preset-passphrase
+    echo "Radiantly2-Cable8-Headdress6-Resisting8-Affirm0" | gpg --batch --import --passphrase-fd 0 stratos-public-key.gpg
+    pacman-key --list-keys
 }
 
 # Create dummy user for makepkg
 create_dummy_user() {
-    sudo pacman-key --init && sudo pacman-key --populate archlinux
     sudo useradd -m builder -s /bin/bash
     sudo usermod -aG wheel builder
     echo '%wheel ALL=(ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers
@@ -44,12 +45,15 @@ create_dummy_user() {
     sudo -u builder curl -sS https://github.com/web-flow.gpg | gpg --dearmor > web-flow.gpg && sudo pacman-key --add web-flow.gpg
     sudo -u builder gpg --import --batch stratos-public-key.gpg
     sudo -u builder gpg --recv-keys 19A421C3D15C8B7C672F0FACC4B8A73AB86B9411
+    sudo pacman-key --add stratos-public-key.gpg
+    sudo pacman-key --lsign 19A421C3D15C8B7C672F0FACC4B8A73AB86B9411
 
 }
 
 # Build and package software
 build_and_package() {
     dir="$(pwd)"
+    sudo git config --global init.defaultBranch main
     # sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm
 
     # git clone https://aur.archlinux.org/kpmcore-git
@@ -66,43 +70,43 @@ build_and_package() {
 
     cd $dir/PKGBUILDS/ckbcomp/
     sudo chmod -R 777 ../ckbcomp
-    sudo -u builder makepkg -cfs --sign --noconfirm
+    sudo -u builder makepkg -cfs --noconfirm
     rm -f **debug**.pkg.tar.zst
     rm -f $dir/x86_64/ckbcomp**.pkg.tar.zst
     mv $dir/PKGBUILDS/ckbcomp/PKGBUILD /tmp && rm -rf $dir/PKGBUILDS/ckbcomp/* && mv /tmp/PKGBUILD $dir/PKGBUILDS/ckbcomp
 
-    # cd $dir/PKGBUILDS/rockers/
-    # sudo chmod -R 777 ../rockers
-    # sudo -u builder makepkg -cfs --sign --noconfirm
-    # rm -f **debug**.pkg.tar.zst
-    # mv *.pkg.tar.zst $dir/x86_64/
-    # cd $dir/
+    cd $dir/PKGBUILDS/rockers/
+    sudo chmod -R 777 ../rockers
+    sudo -u builder makepkg -cfs --sign --noconfirm
+    rm -f **debug**.pkg.tar.zst
+    mv *.pkg.tar.zst $dir/x86_64/
+    cd $dir/
 
-    # mkdir -p /tmp/litefm && chmod -R 777 /tmp/litefm
-    # cp $dir/PKGBUILDS/litefm/PKGBUILD /tmp/litefm
-    # cd /tmp/litefm
-    # rm -f $dir/x86_64/**litefm**.pkg.tar.zst
-    # sudo -u builder makepkg -cfs --sign --noconfirm
-    # mv *.pkg.tar.zst $dir/x86_64/
-    # cd $dir
+    mkdir -p /tmp/litefm && chmod -R 777 /tmp/litefm
+    cp $dir/PKGBUILDS/litefm/PKGBUILD /tmp/litefm
+    cd /tmp/litefm
+    rm -f $dir/x86_64/**litefm**.pkg.tar.zst
+    sudo -u builder makepkg -cfs --sign --noconfirm
+    mv *.pkg.tar.zst $dir/x86_64/
+    cd $dir
 
 
     local packages=(
-        # "albert" 
-        # "aurutils" 
-        # "bibata-cursor-theme-bin"
-        # "calamares-git" 
-        # "eww"
-        # "gruvbox-plus-icon-theme-git" 
-        # "libadwaita-without-adwaita-git" 
-        # "mkinitcpio-openswap" 
-        # "nwg-dock-hyprland" 
+        "albert" 
+        "aurutils" 
+        "bibata-cursor-theme-bin"
+        "calamares-git" 
+        "eww"
+        "gruvbox-plus-icon-theme-git" 
+        "libadwaita-without-adwaita-git" 
+        "mkinitcpio-openswap" 
+        "nwg-dock-hyprland" 
         "pandoc-bin" 
-        # "python-clickgen"
-        # "rua"
-        # "swayosd-git"
-        # "ventoy-bin" 
-        # "yay-bin"
+        "python-clickgen"
+        "rua"
+        "swayosd-git"
+        "ventoy-bin" 
+        "yay-bin"
     )
 
     for i in "${packages[@]}"; do
@@ -110,7 +114,7 @@ build_and_package() {
         sudo chmod -R 777 ./$i
         cd $i
         cp PKGBUILD $dir/PKGBUILDS/$i/PKGBUILD
-        sudo -u builder makepkg -cfs --sign --noconfirm
+        sudo -u builder makepkg -cfs --noconfirm # --sign
         rm -rf $dir/x86_64/"$i"**.pkg.tar.zst
         mv *.pkg.tar.zst $dir/x86_64/
         cd ..
@@ -124,8 +128,8 @@ initialize_and_push() {
     bash ./initialize.sh
     sudo git config --global user.name 'github-actions[bot]'
     sudo git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-    sudo git add .
-    sudo git commit -am "Update packages"
+    # sudo git add .
+    # sudo git commit -am "Update packages"
     # sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/StratOS-Linux/StratOS-repo.git"
 }
 
