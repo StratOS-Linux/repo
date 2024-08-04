@@ -69,7 +69,6 @@ build_and_package() {
     sudo -u builder makepkg -cfs --sign --noconfirm
     rm -f **debug**.pkg.tar.zst
     rm -f $dir/x86_64/ckbcomp**.pkg.tar.zst
-    mv -f *.pkg.tar.zst $dir/x86_64/
     mv $dir/PKGBUILDS/ckbcomp/PKGBUILD /tmp && rm -rf $dir/PKGBUILDS/ckbcomp/* && mv /tmp/PKGBUILD $dir/PKGBUILDS/ckbcomp
 
     # cd $dir/PKGBUILDS/rockers/
