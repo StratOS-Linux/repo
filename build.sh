@@ -29,7 +29,7 @@ import_gpg_key() {
     gpg-agent --daemon --use-standard-socket --allow-preset-passphrase
     gpg --recv-keys 19A421C3D15C8B7C672F0FACC4B8A73AB86B9411
     echo "Radiantly2-Cable8-Headdress6-Resisting8-Affirm0" | gpg --batch --yes --passphrase-fd 0 stratos-public-key.gpg
-    sudo pacman-key --add stratos-public-key.gpg
+    sudo pacman-key --add 19A421C3D15C8B7C672F0FACC4B8A73AB86B9411
     sudo pacman-key --init
     sudo pacman-key --populate
 }
