@@ -9,7 +9,10 @@ install="${pkgname}.install"
 source=('https://raw.githubusercontent.com/stratos-linux/keyring/main/Makefile'
         'https://raw.githubusercontent.com/stratos-linux/keyring/main/stratos.gpg'
         'https://raw.githubusercontent.com/stratos-linux/keyring/main/stratos-revoked'
-        'https://raw.githubusercontent.com/stratos-linux/keyring/main/stratos-trusted')       
+        'https://raw.githubusercontent.com/stratos-linux/keyring/main/stratos-trusted')     
+validpgpkeys=(
+               'A046BE254138E0AC1BF5F66690D63B3FE2F217ED' # zstg
+             )  
 sha512sums=('SKIP'
            'SKIP'
            'SKIP'
