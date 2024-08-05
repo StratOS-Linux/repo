@@ -3,7 +3,7 @@ post_upgrade() {
 		usr/bin/pacman-key --populate stratos
 	else
 		echo " >>> Run \`pacman-key --init\` to set up your pacman keyring."
-		echo " >>> Then run \`pacman-key --populate stratos\` to install the EndeavourOS keyring."
+		echo " >>> Then run \`pacman-key --populate stratos\` to install the StratOS keyring."
 	fi
 }
 
