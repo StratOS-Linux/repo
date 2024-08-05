@@ -20,7 +20,17 @@ setup_environment() {
     cd /tmp/stratos-keyring
     rm -f *.pkg.tar.zst 2>/dev/null
     sudo -u builder makepkg -si --noconfirm
-    # pacman-key --lsign-key A046BE254138E0AC1BF5F66690D63B3FE2F217ED
+    sudo pacman-key --recv-keys A046BE254138E0AC1BF5F66690D63B3FE2F217ED
+    # sudo pacman-key --finger A046BE254138E0AC1BF5F66690D63B3FE2F217ED
+    # sudo pacman-key --lsign A046BE254138E0AC1BF5F66690D63B3FE2F217ED
+    # echo "A046BE254138E0AC1BF5F66690D63B3FE2F217ED:6:" | gpg --import-ownertrust -
+    # echo "A046BE254138E0AC1BF5F66690D63B3FE2F217ED:6:" | sudo -u builder gpg --import-ownertrust -
+    # echo -e "trust\n6\ny\nsave\n" | sudo pacman-key --edit-key A046BE254138E0AC1BF5F66690D63B3FE2F217ED
+    sudo gpg --homedir /etc/pacman.d/gnupg --export-ownertrust > /etc/pacman.d/gnupg/ownertrust.txt
+    echo "A046BE254138E0AC1BF5F66690D63B3FE2F217ED:6:" >> /etc/pacman.d/gnupg/ownertrust.txt
+    sudo gpg --homedir /etc/pacman.d/gnupg --import-ownertrust < /etc/pacman.d/gnupg/ownertrust.txt    
+    pacman-key --list-keys | tail -n 20
+    exit 1
     cd $dir
     echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = https://StratOS-Linux.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
     sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
