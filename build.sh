@@ -96,6 +96,15 @@ build_and_package() {
     sudo pacman -U *.pkg.tar.zst --noconfirm
     cd $dir
 
+    mkdir -p /tmp/grab
+    cp $dir/PKGBUILDS/grab/PKGBUILD /tmp/grab
+    cd /tmp/grab
+    sudo chmod -R 777 /tmp/grab
+    sudo -u builder makepkg -cfs --noconfirm
+    rm -f **debug**.pkg.tar.zst
+    cp *.pkg.tar.zst $dir/x86_64/
+    cd $dir
+
     cd /tmp
     rm -rf /tmp/repoctl
     git clone https://aur.archlinux.org/repoctl.git
@@ -125,6 +134,7 @@ build_and_package() {
         "nwg-dock-hyprland-bin" 
         "pandoc-bin" 
         "python-clickgen"
+        "pyprland"
         # #"repoctl"
         "rua"
         # #"swayosd-git"
