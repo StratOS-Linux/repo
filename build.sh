@@ -52,12 +52,11 @@ create_dummy_user() {
 # Build and package software
 build_and_package() {
     sudo pacman -Sy
-    sudo pacman -S go --noconfirm 
-    go env -w GOFLAGS="-buildvcs=false"
     dir="$(pwd)"
     sudo git config --global init.defaultBranch main
 
     # # sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm
+    sudo pacman -U $dir/x86_64/repoctl-0.22.2-1-x86_64.pkg.tar.zst --noconfirm
     # cd $dir/PKGBUILDS/rockers/
     # sudo chmod -R 777 ../rockers
     # sudo -u builder makepkg -cfs --noconfirm # --sign
@@ -95,9 +94,12 @@ build_and_package() {
     # mv $dir/PKGBUILDS/ckbcomp/PKGBUILD /tmp && rm -rf $dir/PKGBUILDS/ckbcomp/* && mv /tmp/PKGBUILD $dir/PKGBUILDS/ckbcomp
 
 
+    cd $dir/PKGBUILDS/repoctl/
+    sudo chmod -R 777 ../repoctl
+
     local packages=(
         # "albert" 
-        "aurutils" 
+        # "aurutils" 
         # "bibata-cursor-theme-bin"
         # "calamares-git" 
         ## "eww"
@@ -107,11 +109,11 @@ build_and_package() {
         # "nwg-dock-hyprland" 
         # "pandoc-bin" 
         # "python-clickgen"
-        "repoctl"
+        # "repoctl"
         # "rua"
         # "swayosd-git"
         # "ventoy-bin" 
-        "yay-bin"
+        # "yay-bin"
     )
 
     for i in "${packages[@]}"; do
