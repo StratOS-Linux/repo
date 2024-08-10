@@ -56,14 +56,14 @@ build_and_package() {
     dir="$(pwd)"
     sudo git config --global init.defaultBranch main
 
-    # sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm
-    cd $dir/PKGBUILDS/rockers/
-    sudo chmod -R 777 ../rockers
-    sudo -u builder makepkg -cfs --noconfirm # --sign
-    rm -f **debug**.pkg.tar.zst
-    rm -rf src/ pkg/
-    mv *.pkg.tar.zst $dir/x86_64/
-    cd $dir/
+    # # sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm
+    # cd $dir/PKGBUILDS/rockers/
+    # sudo chmod -R 777 ../rockers
+    # sudo -u builder makepkg -cfs --noconfirm # --sign
+    # rm -f **debug**.pkg.tar.zst
+    # rm -rf src/ pkg/
+    # mv *.pkg.tar.zst $dir/x86_64/
+    # cd $dir/
 
     mkdir -p /tmp/litefm && chmod -R 777 /tmp/litefm
     cp $dir/PKGBUILDS/litefm/PKGBUILD /tmp/litefm
@@ -73,25 +73,25 @@ build_and_package() {
     mv *.pkg.tar.zst $dir/x86_64/
     cd $dir/
 
-    cd /tmp
-    git clone https://aur.archlinux.org/kpmcore-git
-    sudo chmod -R 777 ./kpmcore-git
-    cd kpmcore-git
-    sudo -u builder makepkg -cfs --noconfirm # --sign
-    rm -f **debug**.pkg.tar.zst
-    rm -f $dir/x86_64/**kpmcore**.pkg.tar.zst
-    cp *.pkg.tar.zst $dir/x86_64/
-    cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
-    sudo pacman -U *.pkg.tar.zst --noconfirm
-    cd ..
-    rm -rf kpmcore-git
+    # cd /tmp
+    # git clone https://aur.archlinux.org/kpmcore-git
+    # sudo chmod -R 777 ./kpmcore-git
+    # cd kpmcore-git
+    # sudo -u builder makepkg -cfs --noconfirm # --sign
+    # rm -f **debug**.pkg.tar.zst
+    # rm -f $dir/x86_64/**kpmcore**.pkg.tar.zst
+    # cp *.pkg.tar.zst $dir/x86_64/
+    # cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
+    # sudo pacman -U *.pkg.tar.zst --noconfirm
+    # cd ..
+    # rm -rf kpmcore-git
 
-    cd $dir/PKGBUILDS/ckbcomp/
-    sudo chmod -R 777 ../ckbcomp
-    sudo -u builder makepkg -cfs --noconfirm # --sign
-    rm -f **debug**.pkg.tar.zst
-    rm -f $dir/x86_64/ckbcomp**.pkg.tar.zst
-    mv $dir/PKGBUILDS/ckbcomp/PKGBUILD /tmp && rm -rf $dir/PKGBUILDS/ckbcomp/* && mv /tmp/PKGBUILD $dir/PKGBUILDS/ckbcomp
+    # cd $dir/PKGBUILDS/ckbcomp/
+    # sudo chmod -R 777 ../ckbcomp
+    # sudo -u builder makepkg -cfs --noconfirm # --sign
+    # rm -f **debug**.pkg.tar.zst
+    # rm -f $dir/x86_64/ckbcomp**.pkg.tar.zst
+    # mv $dir/PKGBUILDS/ckbcomp/PKGBUILD /tmp && rm -rf $dir/PKGBUILDS/ckbcomp/* && mv /tmp/PKGBUILD $dir/PKGBUILDS/ckbcomp
 
 
     local packages=(
