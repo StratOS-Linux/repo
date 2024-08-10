@@ -9,10 +9,9 @@ url="https://github.com/cassava/repoctl"
 license=('MIT')
 depends=('pacman')
 makedepends=('go>=1.22.1' 'xz')
-options=('!strip !debug')
+options=('!strip')
 source=(https://github.com/cassava/repoctl/releases/download/v${pkgver}/repoctl-${pkgver}.tar.gz)
-# md5sums=('ede438b0703064bf2a7aeded8ce47ebf')
-md5sums=('SKIP')
+md5sums=('ede438b0703064bf2a7aeded8ce47ebf')
 
 build() {
   cd "${pkgname}-${pkgver}"
@@ -23,7 +22,7 @@ build() {
   export CGO_CFLAGS="${CFLAGS}"
   export CGO_CXXFLAGS="${CXXFLAGS}"
   export CGO_LDFLAGS="${LDFLAGS}"
-  export GOFLAGS="-buildmode=pie -trimpath -ldflags=-linkmode=external -mod=vendor -modcacherw -buildvcs=false"
+  export GOFLAGS="-buildmode=pie -trimpath -ldflags=-linkmode=external -mod=vendor -modcacherw"
 
   # Build the binary
   go build -v -o "${pkgname}"
@@ -50,3 +49,4 @@ package() {
   install -Dm644 completion.bash "${pkgdir}/usr/share/bash-completion/completions/repoctl"
   install -Dm644 completion.fish "${pkgdir}/usr/share/fish/vendor_completions.d/repoctl.fish"
 }
+

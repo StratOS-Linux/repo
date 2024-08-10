@@ -17,21 +17,20 @@ conflicts=('litefm')
 build() {
     git clone "$url"
     cd "$pkgname"
-    cmake -DCMAKE_COMPILE_WARNING_AS_ERROR=OFF -S . -B build/
+    CFLAGS=-Wno-error cmake -DCMAKE_COMPILE_WARNING_AS_ERROR=OFF -S . -B build/
     cmake --build build/
 }
 
 package() {
     cd "$pkgname/build"
     install -Dm755 "litefm" "$pkgdir/usr/bin/litefm"
-    install -Dm755 "lfm" "$pkgdir/usr/bin/litefm"
+    install -Dm755 "litefm" "$pkgdir/usr/bin/lfm"
     
     # man page
     install -Dm644 "../components/litefm.1" "$pkgdir/usr/share/man/man1/litefm.1"
     gzip "$pkgdir/usr/share/man/man1/litefm.1"    
 }
 
-# Optional: Add a post-install message
 post_install() {
     echo "Please restart your terminal or source your shell configuration file to use the litefm command."
 }

@@ -31,7 +31,6 @@ setup_environment() {
     # echo "A046BE254138E0AC1BF5F66690D63B3FE2F217ED:6:" >> /etc/pacman.d/gnupg/ownertrust.txt
     # sudo gpg --homedir /etc/pacman.d/gnupg --import-ownertrust < /etc/pacman.d/gnupg/ownertrust.txt    
     # pacman-key --list-keys | tail -n 20
-    # exit 1
     cd $dir
     echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = https://StratOS-Linux.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
     sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
@@ -56,46 +55,62 @@ build_and_package() {
     sudo git config --global init.defaultBranch main
 
     # # sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm
-    sudo pacman -U $dir/x86_64/repoctl-0.22.2-1-x86_64.pkg.tar.zst --noconfirm
-    # cd $dir/PKGBUILDS/rockers/
-    # sudo chmod -R 777 ../rockers
-    # sudo -u builder makepkg -cfs --noconfirm # --sign
-    # rm -f **debug**.pkg.tar.zst
-    # rm -rf src/ pkg/
-    # mv *.pkg.tar.zst $dir/x86_64/
-    # cd $dir/
+    # sudo pacman -U $dir/x86_64/repoctl-0.22.2-1-x86_64.pkg.tar.zst --noconfirm
+    cd $dir/PKGBUILDS/rockers/
+    sudo chmod -R 777 ../rockers
+    sudo -u builder makepkg -cfs --noconfirm # --sign
+    rm -f **debug**.pkg.tar.zst
+    rm -rf src/ pkg/
+    mv *.pkg.tar.zst $dir/x86_64/
+    cd $dir/
 
-    # mkdir -p /tmp/litefm && chmod -R 777 /tmp/litefm
-    # cp $dir/PKGBUILDS/litefm/PKGBUILD /tmp/litefm
-    # cd /tmp/litefm
-    # rm -f $dir/x86_64/**litefm**.pkg.tar.zst
-    # sudo -u builder makepkg -cfs --noconfirm # --sign
-    # mv *.pkg.tar.zst $dir/x86_64/
-    # cd $dir/
+    mkdir -p /tmp/litefm && chmod -R 777 /tmp/litefm
+    cp $dir/PKGBUILDS/litefm/PKGBUILD /tmp/litefm
+    cd /tmp/litefm
+    rm -f $dir/x86_64/**litefm**.pkg.tar.zst
+    sudo -u builder makepkg -cfs --noconfirm # --sign
+    mv *.pkg.tar.zst $dir/x86_64/
+    cd $dir/
 
-    # cd /tmp
-    # git clone https://aur.archlinux.org/kpmcore-git
-    # sudo chmod -R 777 ./kpmcore-git
-    # cd kpmcore-git
-    # sudo -u builder makepkg -cfs --noconfirm # --sign
-    # rm -f **debug**.pkg.tar.zst
-    # rm -f $dir/x86_64/**kpmcore**.pkg.tar.zst
-    # cp *.pkg.tar.zst $dir/x86_64/
-    # cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
-    # sudo pacman -U *.pkg.tar.zst --noconfirm
-    # cd ..
-    # rm -rf kpmcore-git
+    cd /tmp
+    git clone https://aur.archlinux.org/kpmcore-git
+    sudo chmod -R 777 ./kpmcore-git
+    cd kpmcore-git
+    sudo -u builder makepkg -cfs --noconfirm # --sign
+    rm -f **debug**.pkg.tar.zst
+    rm -f $dir/x86_64/**kpmcore**.pkg.tar.zst
+    cp *.pkg.tar.zst $dir/x86_64/
+    cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
+    sudo pacman -U *.pkg.tar.zst --noconfirm
+    cd ..
+    rm -rf kpmcore-git
+    cd $dir
 
-    # cd $dir/PKGBUILDS/ckbcomp/
-    # sudo chmod -R 777 ../ckbcomp
-    # sudo -u builder makepkg -cfs --noconfirm # --sign
-    # rm -f **debug**.pkg.tar.zst
-    # rm -f $dir/x86_64/ckbcomp**.pkg.tar.zst
-    # mv $dir/PKGBUILDS/ckbcomp/PKGBUILD /tmp && rm -rf $dir/PKGBUILDS/ckbcomp/* && mv /tmp/PKGBUILD $dir/PKGBUILDS/ckbcomp
+    mkdir -p /tmp/ckbcomp
+    cp $dir/PKGBUILDS/ckbcomp/PKGBUILD /tmp/ckbcomp
+    cd /tmp/ckbcomp
+    sudo chmod -R 777 /tmp/ckbcomp
+    sudo -u builder makepkg -cfs --noconfirm
+    rm -f **debug**.pkg.tar.zst
+    cp *.pkg.tar.zst $dir/x86_64/
+    sudo pacman -U *.pkg.tar.zst --noconfirm
+    cd $dir
 
-
-    # cd $dir/PKGBUILDS/repoctl/
-    # sudo chmod -R 777 ../repoctl
+    cd /tmp
+    rm -rf /tmp/repoctl
+    git clone https://aur.archlinux.org/repoctl.git
+    sudo chmod -R 777 ./repoctl
+    sudo git config --global --add safe.directory /tmp/repoctl
+    sudo -u builder git config --global --add safe.directory /tmp/repoctl
+    cd repoctl
+    sudo -u builder makepkg -cfs --noconfirm # --sign
+    rm -f **debug**.pkg.tar.zst
+    rm -f $dir/x86_64/**repoctl**.pkg.tar.zst
+    cp *.pkg.tar.zst $dir/x86_64/
+    cp PKGBUILD $dir/PKGBUILDS/repoctl/PKGBUILD
+    sudo pacman -U *.pkg.tar.zst --noconfirm
+    rm -rf ../repoctl
+    cd $dir
 
     local packages=(
         "albert" 
