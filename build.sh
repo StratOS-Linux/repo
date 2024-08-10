@@ -94,8 +94,8 @@ build_and_package() {
     # mv $dir/PKGBUILDS/ckbcomp/PKGBUILD /tmp && rm -rf $dir/PKGBUILDS/ckbcomp/* && mv /tmp/PKGBUILD $dir/PKGBUILDS/ckbcomp
 
 
-    cd $dir/PKGBUILDS/repoctl/
-    sudo chmod -R 777 ../repoctl
+    # cd $dir/PKGBUILDS/repoctl/
+    # sudo chmod -R 777 ../repoctl
 
     local packages=(
         # "albert" 
@@ -127,7 +127,7 @@ build_and_package() {
         cd ..
         rm -rf $i
     done
-    sudo pacman -U $dir/x86_64/**repoctl** --noconfirm
+    # sudo pacman -U $dir/x86_64/**repoctl** --noconfirm
     sudo pacman -U $dir/x86_64/**aurutils** --noconfirm
     
 }
