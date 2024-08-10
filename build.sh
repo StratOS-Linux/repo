@@ -140,7 +140,7 @@ initialize_and_push() {
     sudo git config --global user.email 'github-actions[bot]@users.noreply.github.com'
     sudo git add .
     sudo git commit -am "Update packages"
-    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/zstg/StratOS-repo.git"
+    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/StratOS-Linux/StratOS-repo.git"
 }
 
 # Main function
