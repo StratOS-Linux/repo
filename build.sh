@@ -149,7 +149,7 @@ main() {
 }
 
 # Ensure GITHUB_TOKEN is set
-if [ -z "$GITHUB_TOKEN" ]; then
+if [ -d "/workspace" ] && [ -z "$GITHUB_TOKEN" ]; then
     echo "GITHUB_TOKEN is not set. Please set it - following the instructions in README.md - before running this script."
     exit 1
 fi
