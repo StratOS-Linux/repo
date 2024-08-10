@@ -95,21 +95,21 @@ build_and_package() {
 
 
     local packages=(
-        "albert" 
+        # "albert" 
         "aurutils" 
-        "bibata-cursor-theme-bin"
-        "calamares-git" 
+        # "bibata-cursor-theme-bin"
+        # "calamares-git" 
         ## "eww"
-        "gruvbox-plus-icon-theme-git" 
-        "libadwaita-without-adwaita-git" 
-        "mkinitcpio-openswap" 
-        "nwg-dock-hyprland" 
-        "pandoc-bin" 
-        "python-clickgen"
+        # "gruvbox-plus-icon-theme-git" 
+        # "libadwaita-without-adwaita-git" 
+        # "mkinitcpio-openswap" 
+        # "nwg-dock-hyprland" 
+        # "pandoc-bin" 
+        # "python-clickgen"
         "repoctl"
-        "rua"
-        "swayosd-git"
-        "ventoy-bin" 
+        # "rua"
+        # "swayosd-git"
+        # "ventoy-bin" 
         "yay-bin"
     )
 
@@ -135,9 +135,9 @@ initialize_and_push() {
     bash ./initialize.sh
     sudo git config --global user.name 'github-actions[bot]'
     sudo git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-    # sudo git add .
-    # sudo git commit -am "Update packages"
-    # sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/StratOS-Linux/StratOS-repo.git"
+    sudo git add .
+    sudo git commit -am "Update packages"
+    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/StratOS-Linux/StratOS-repo.git"
 }
 
 # Main function
