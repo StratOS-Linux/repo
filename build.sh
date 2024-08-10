@@ -44,8 +44,8 @@ create_dummy_user() {
     sudo useradd -m builder -s /bin/bash
     sudo usermod -aG wheel builder
     echo '%wheel ALL=(ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers
-    # sudo -u builder curl -sS https://github.com/elkowar.gpg | gpg --dearmor > elkowar.gpg && sudo pacman-key --add elkowar.gpg
-    # sudo -u builder curl -sS https://github.com/web-flow.gpg | gpg --dearmor > web-flow.gpg && sudo pacman-key --add web-flow.gpg
+    sudo -u builder curl -sS https://github.com/elkowar.gpg | gpg --dearmor > elkowar.gpg && sudo pacman-key --add elkowar.gpg
+    sudo -u builder curl -sS https://github.com/web-flow.gpg | gpg --dearmor > web-flow.gpg && sudo pacman-key --add web-flow.gpg
 }
 
 # Build and package software
@@ -114,6 +114,7 @@ build_and_package() {
 
     local packages=(
         "albert" 
+        "aura-bin"
         "aurutils" 
         "bibata-cursor-theme-bin"
         "calamares-git" 
@@ -121,7 +122,7 @@ build_and_package() {
         "gruvbox-plus-icon-theme-git" 
         "libadwaita-without-adwaita-git" 
         "mkinitcpio-openswap" 
-        "nwg-dock-hyprland" 
+        "nwg-dock-hyprland-bin" 
         "pandoc-bin" 
         "python-clickgen"
         # #"repoctl"
@@ -135,6 +136,7 @@ build_and_package() {
         git clone https://aur.archlinux.org/$i
         sudo chmod -R 777 ./$i
         cd $i
+        mkdir -p $dir/PKGBUILDS/$i/
         cp PKGBUILD $dir/PKGBUILDS/$i/PKGBUILD
         sudo -u builder makepkg -cfs --noconfirm # --sign
         rm -rf $dir/x86_64/"$i"**.pkg.tar.zst
@@ -156,7 +158,7 @@ initialize_and_push() {
     sudo git add .
     sudo git commit -am "Update packages"
     sudo git pull
-    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/StratOS-Linux/StratOS-repo.git"
+    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/StratOS-Linux/StratOS-repo.git" --force
 }
 
 # Main function
