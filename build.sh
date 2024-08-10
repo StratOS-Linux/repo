@@ -98,22 +98,22 @@ build_and_package() {
     # sudo chmod -R 777 ../repoctl
 
     local packages=(
-        # "albert" 
-        # "aurutils" 
-        # "bibata-cursor-theme-bin"
-        # "calamares-git" 
-        ## "eww"
-        # "gruvbox-plus-icon-theme-git" 
-        # "libadwaita-without-adwaita-git" 
-        # "mkinitcpio-openswap" 
-        # "nwg-dock-hyprland" 
-        # "pandoc-bin" 
-        # "python-clickgen"
-        # "repoctl"
-        # "rua"
-        # "swayosd-git"
-        # "ventoy-bin" 
-        # "yay-bin"
+        "albert" 
+        "aurutils" 
+        "bibata-cursor-theme-bin"
+        "calamares-git" 
+        # #"eww"
+        "gruvbox-plus-icon-theme-git" 
+        "libadwaita-without-adwaita-git" 
+        "mkinitcpio-openswap" 
+        "nwg-dock-hyprland" 
+        "pandoc-bin" 
+        "python-clickgen"
+        # #"repoctl"
+        "rua"
+        "swayosd-git"
+        "ventoy-bin" 
+        "yay-bin"
     )
 
     for i in "${packages[@]}"; do
