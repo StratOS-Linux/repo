@@ -38,6 +38,7 @@ setup_environment() {
     # sudo sed -i 's/^#* *GPGKEY *=.*/GPGKEY="A046BE254138E0AC1BF5F66690D63B3FE2F217ED"/' /etc/makepkg.conf # add zstg's public key
     sed -i 's/^#*\(PACKAGER=\).*/\1"StratOS team <stratos-linux@gmail.com>"/' /etc/makepkg.conf
     git config --global --add safe.directory /workspace
+    git config --global --add safe.directory /workspace/repoctl
 }
 
 # Create dummy user for makepkg
@@ -65,13 +66,13 @@ build_and_package() {
     # mv *.pkg.tar.zst $dir/x86_64/
     # cd $dir/
 
-    mkdir -p /tmp/litefm && chmod -R 777 /tmp/litefm
-    cp $dir/PKGBUILDS/litefm/PKGBUILD /tmp/litefm
-    cd /tmp/litefm
-    rm -f $dir/x86_64/**litefm**.pkg.tar.zst
-    sudo -u builder makepkg -cfs --noconfirm # --sign
-    mv *.pkg.tar.zst $dir/x86_64/
-    cd $dir/
+    # mkdir -p /tmp/litefm && chmod -R 777 /tmp/litefm
+    # cp $dir/PKGBUILDS/litefm/PKGBUILD /tmp/litefm
+    # cd /tmp/litefm
+    # rm -f $dir/x86_64/**litefm**.pkg.tar.zst
+    # sudo -u builder makepkg -cfs --noconfirm # --sign
+    # mv *.pkg.tar.zst $dir/x86_64/
+    # cd $dir/
 
     # cd /tmp
     # git clone https://aur.archlinux.org/kpmcore-git
