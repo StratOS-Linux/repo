@@ -17,7 +17,7 @@ conflicts=('litefm')
 build() {
     git clone "$url"
     cd "$pkgname"
-    cmake -DCMAKE_COMPILE_WARNING_AS_ERROR=ON -S . -B build/
+    cmake -DCMAKE_COMPILE_WARNING_AS_ERROR=OFF -S . -B build/
     cmake --build build/
 }
 

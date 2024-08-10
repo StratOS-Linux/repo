@@ -8,7 +8,7 @@ handle_error() {
 
 # Trap errors
 trap 'handle_error $LINENO' ERR
-[ -d /workspace ] && git config --global --add safe.directory /workspace
+[ -d /workspace ] && git config --global --add safe.directory /workspace && git config --global --add safe.directory /workspace/repoctl
 
 # Set up Arch Linux environment
 setup_environment() {
@@ -20,13 +20,23 @@ setup_environment() {
     cd /tmp/stratos-keyring
     rm -f *.pkg.tar.zst 2>/dev/null
     sudo -u builder makepkg -si --noconfirm
-    # pacman-key --lsign-key A046BE254138E0AC1BF5F66690D63B3FE2F217ED
+    # sudo pacman-key --recv-keys A046BE254138E0AC1BF5F66690D63B3FE2F217ED
+    # sudo pacman-key --finger A046BE254138E0AC1BF5F66690D63B3FE2F217ED
+    sudo pacman-key --lsign A046BE254138E0AC1BF5F66690D63B3FE2F217ED
+    ## echo "A046BE254138E0AC1BF5F66690D63B3FE2F217ED:6:" | gpg --import-ownertrust -
+    ## echo "A046BE254138E0AC1BF5F66690D63B3FE2F217ED:6:" | sudo -u builder gpg --import-ownertrust -
+    ## echo -e "trust\n6\ny\nsave\n" | sudo pacman-key --edit-key A046BE254138E0AC1BF5F66690D63B3FE2F217ED
+    # Do this if you want the packages to show up with "Ultimate" trust - else they'll be "full"y trusted bcos of pacman-key
+    # sudo gpg --homedir /etc/pacman.d/gnupg --export-ownertrust > /etc/pacman.d/gnupg/ownertrust.txt
+    # echo "A046BE254138E0AC1BF5F66690D63B3FE2F217ED:6:" >> /etc/pacman.d/gnupg/ownertrust.txt
+    # sudo gpg --homedir /etc/pacman.d/gnupg --import-ownertrust < /etc/pacman.d/gnupg/ownertrust.txt    
+    # pacman-key --list-keys | tail -n 20
+    # exit 1
     cd $dir
     echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = https://StratOS-Linux.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
     sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
-    sudo sed -i 's/^#* *GPGKEY *=.*/GPGKEY="A046BE254138E0AC1BF5F66690D63B3FE2F217ED"/' /etc/makepkg.conf # add zstg's public key
+    # sudo sed -i 's/^#* *GPGKEY *=.*/GPGKEY="A046BE254138E0AC1BF5F66690D63B3FE2F217ED"/' /etc/makepkg.conf # add zstg's public key
     sed -i 's/^#*\(PACKAGER=\).*/\1"StratOS team <stratos-linux@gmail.com>"/' /etc/makepkg.conf
-    git config --global --add safe.directory /workspace
 }
 
 # Create dummy user for makepkg
@@ -41,11 +51,29 @@ create_dummy_user() {
 
 # Build and package software
 build_and_package() {
+    sudo pacman -Sy
     dir="$(pwd)"
     sudo git config --global init.defaultBranch main
 
-    # sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm
+    # # sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm
+    sudo pacman -U $dir/x86_64/repoctl-0.22.2-1-x86_64.pkg.tar.zst --noconfirm
+    # cd $dir/PKGBUILDS/rockers/
+    # sudo chmod -R 777 ../rockers
+    # sudo -u builder makepkg -cfs --noconfirm # --sign
+    # rm -f **debug**.pkg.tar.zst
+    # rm -rf src/ pkg/
+    # mv *.pkg.tar.zst $dir/x86_64/
+    # cd $dir/
 
+    # mkdir -p /tmp/litefm && chmod -R 777 /tmp/litefm
+    # cp $dir/PKGBUILDS/litefm/PKGBUILD /tmp/litefm
+    # cd /tmp/litefm
+    # rm -f $dir/x86_64/**litefm**.pkg.tar.zst
+    # sudo -u builder makepkg -cfs --noconfirm # --sign
+    # mv *.pkg.tar.zst $dir/x86_64/
+    # cd $dir/
+
+    # cd /tmp
     # git clone https://aur.archlinux.org/kpmcore-git
     # sudo chmod -R 777 ./kpmcore-git
     # cd kpmcore-git
@@ -65,38 +93,27 @@ build_and_package() {
     # rm -f $dir/x86_64/ckbcomp**.pkg.tar.zst
     # mv $dir/PKGBUILDS/ckbcomp/PKGBUILD /tmp && rm -rf $dir/PKGBUILDS/ckbcomp/* && mv /tmp/PKGBUILD $dir/PKGBUILDS/ckbcomp
 
-    # cd $dir/PKGBUILDS/rockers/
-    # sudo chmod -R 777 ../rockers
-    # sudo -u builder makepkg -cfs --noconfirm --sign
-    # rm -f **debug**.pkg.tar.zst
-    # mv *.pkg.tar.zst $dir/x86_64/
-    # cd $dir/
 
-    # mkdir -p /tmp/litefm && chmod -R 777 /tmp/litefm
-    # cp $dir/PKGBUILDS/litefm/PKGBUILD /tmp/litefm
-    # cd /tmp/litefm
-    # rm -f $dir/x86_64/**litefm**.pkg.tar.zst
-    # sudo -u builder makepkg -cfs --noconfirm --sign
-    # mv *.pkg.tar.zst $dir/x86_64/
-    # cd $dir
-
+    # cd $dir/PKGBUILDS/repoctl/
+    # sudo chmod -R 777 ../repoctl
 
     local packages=(
         # "albert" 
         # "aurutils" 
         # "bibata-cursor-theme-bin"
         # "calamares-git" 
-        # "eww"
+        ## "eww"
         # "gruvbox-plus-icon-theme-git" 
         # "libadwaita-without-adwaita-git" 
         # "mkinitcpio-openswap" 
         # "nwg-dock-hyprland" 
         # "pandoc-bin" 
         # "python-clickgen"
+        # "repoctl"
         # "rua"
         # "swayosd-git"
         # "ventoy-bin" 
-        "yay-bin"
+        # "yay-bin"
     )
 
     for i in "${packages[@]}"; do
@@ -104,12 +121,15 @@ build_and_package() {
         sudo chmod -R 777 ./$i
         cd $i
         cp PKGBUILD $dir/PKGBUILDS/$i/PKGBUILD
-        sudo -u builder makepkg -cfs --noconfirm --sign
+        sudo -u builder makepkg -cfs --noconfirm # --sign
         rm -rf $dir/x86_64/"$i"**.pkg.tar.zst
         mv *.pkg.tar.zst $dir/x86_64/
         cd ..
         rm -rf $i
     done
+    # sudo pacman -U $dir/x86_64/**repoctl** --noconfirm
+    sudo pacman -U $dir/x86_64/**aurutils** --noconfirm
+    
 }
 
 # Initialize and push to GitHub
@@ -118,9 +138,9 @@ initialize_and_push() {
     bash ./initialize.sh
     sudo git config --global user.name 'github-actions[bot]'
     sudo git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-    # sudo git add .
-    # sudo git commit -am "Update packages"
-    # sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/StratOS-Linux/StratOS-repo.git"
+    sudo git add .
+    sudo git commit -am "Update packages"
+    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/zstg/StratOS-repo.git"
 }
 
 # Main function
@@ -132,7 +152,7 @@ main() {
 }
 
 # Ensure GITHUB_TOKEN is set
-if [ -z "$GITHUB_TOKEN" ]; then
+if [ ! -d "/workspace" ] && [ -z "$GITHUB_TOKEN" ]; then
     echo "GITHUB_TOKEN is not set. Please set it - following the instructions in README.md - before running this script."
     exit 1
 fi

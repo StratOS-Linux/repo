@@ -14,6 +14,8 @@ jobs:
       pull-requests: write
       repository-projects: write
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: Build packages via Docker
         run: |
           docker compose up
