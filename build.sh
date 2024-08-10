@@ -8,7 +8,7 @@ handle_error() {
 
 # Trap errors
 trap 'handle_error $LINENO' ERR
-[ -d /workspace ] && git config --global --add safe.directory /workspace
+[ -d /workspace ] && git config --global --add safe.directory /workspace && git config --global --add safe.directory /workspace/repoctl
 
 # Set up Arch Linux environment
 setup_environment() {
@@ -37,8 +37,6 @@ setup_environment() {
     sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
     # sudo sed -i 's/^#* *GPGKEY *=.*/GPGKEY="A046BE254138E0AC1BF5F66690D63B3FE2F217ED"/' /etc/makepkg.conf # add zstg's public key
     sed -i 's/^#*\(PACKAGER=\).*/\1"StratOS team <stratos-linux@gmail.com>"/' /etc/makepkg.conf
-    git config --global --add safe.directory /workspace
-    git config --global --add safe.directory /workspace/repoctl
 }
 
 # Create dummy user for makepkg
@@ -54,6 +52,8 @@ create_dummy_user() {
 # Build and package software
 build_and_package() {
     sudo pacman -Sy
+    sudo pacman -S go --noconfirm 
+    go env -w GOFLAGS="-buildvcs=false"
     dir="$(pwd)"
     sudo git config --global init.defaultBranch main
 
