@@ -3,7 +3,7 @@
 
 _pkgname="calamares"
 pkgname="$_pkgname-git"
-pkgver=3.3.5.r19.g10acebf
+pkgver=3.3.9.r20.ga904466
 pkgrel=1
 pkgdesc="Distribution-independent installer framework"
 url="https://github.com/calamares/calamares"
@@ -52,8 +52,10 @@ _pkgsrc="$_pkgname"
 source=(
   "$_pkgsrc"::"git+$url.git"
   "yay-support.patch"
+  "calamares.desktop"
 )
 sha256sums=(
+  'SKIP'
   'SKIP'
   'SKIP'
 )
@@ -129,6 +131,8 @@ build() {
 
   cmake "${_cmake_options[@]}"
   cmake --build build
+  install -Dm644 "calamares.desktop" "$pkgdir/usr/share/applications/calamares.desktop"
+  install -Dm777 "calamares.desktop" "$pkgdir/etc/xdg/autostart/calamares.desktop"
 }
 
 package() {
