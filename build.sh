@@ -170,7 +170,7 @@ initialize_and_push() {
     sudo git add .
     sudo git commit -am "Update packages"
     sudo git pull
-    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}" --force
+    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${git config --get remote.origin.url | sed -E 's/.*[:/]([^:/]+)\/(.+)\.git/\1\/\2/'}" --force
 }
 
 # Main function
