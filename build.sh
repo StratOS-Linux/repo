@@ -137,6 +137,8 @@ build_and_package() {
         "pyprland"
         # #"repoctl"
         "rua"
+        "swayfx"
+        "sway-nvidia"
         # #"swayosd-git"
         "ventoy-bin" 
         "yay-bin"
