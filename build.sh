@@ -122,26 +122,26 @@ build_and_package() {
     cd $dir
 
     local packages=(
-        "albert" 
-        "aura-bin"
-        "aurutils" 
-        "bibata-cursor-theme-bin"
-        "calamares-git" 
+        # "albert" 
+        # "aura-bin"
+        # "aurutils" 
+        # "bibata-cursor-theme-bin"
+        # "calamares-git" 
         # #"eww"
-        "gruvbox-plus-icon-theme-git" 
-        "libadwaita-without-adwaita-git" 
-        "mkinitcpio-openswap" 
+        # "gruvbox-plus-icon-theme-git" 
+        # "libadwaita-without-adwaita-git" 
+        # "mkinitcpio-openswap" 
         "nwg-dock-hyprland-bin" 
-        "pandoc-bin" 
-        "python-clickgen"
+        # "pandoc-bin" 
+        # "python-clickgen"
         "pyprland"
         # #"repoctl"
-        "rua"
+        # "rua"
         "swayfx"
         "sway-nvidia"
         # #"swayosd-git"
-        "ventoy-bin" 
-        "yay-bin"
+        # "ventoy-bin" 
+        # "yay-bin"
     )
 
     for i in "${packages[@]}"; do
@@ -170,7 +170,7 @@ initialize_and_push() {
     sudo git add .
     sudo git commit -am "Update packages"
     sudo git pull
-    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${git config --get remote.origin.url | sed -E 's/.*[:/]([^:/]+)\/(.+)\.git/\1\/\2/'}" --force
+    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1/\2|'}" --force
 }
 
 # Main function
