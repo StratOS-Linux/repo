@@ -19,4 +19,5 @@ sha512sums=('SKIP'
             'SKIP')
 package() {
     install -D -m0644 -t "${pkgdir}"/usr/share/pacman/keyrings/ 'stratos'{.gpg,-trusted,-revoked}
+    sudo pacman-key --lsign-key A046BE254138E0AC1BF5F66690D63B3FE2F217ED
 }
