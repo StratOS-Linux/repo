@@ -123,7 +123,7 @@ build_and_package() {
     cd $dir
 
     local packages=(
-        "albert" 
+        # "albert" 
         "aura-bin"
         # "aurutils" 
         "bibata-cursor-theme-bin"
@@ -136,16 +136,16 @@ build_and_package() {
         # "mkinitcpio-openswap" 
         # "nwg-clipman"
         "nwg-dock-hyprland-bin" 
-        "octopi"
+        # "octopi"
         "oh-my-zsh-git"
-        "pamac-all"
+        # "pamac-all"
         "pandoc-bin" 
         "python-clickgen"
         "pyprland"
         # #"repoctl"
-        "rua"
-        "swayfx"
-        "sway-nvidia"
+        # "rua"
+        # "swayfx"
+        # "sway-nvidia"
         # #"swayosd-git"
         "ventoy-bin" 
         "yay-bin"
@@ -177,7 +177,7 @@ initialize_and_push() {
     sudo git add .
     sudo git commit -am "Update packages"
     sudo git pull
-    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1/\2|'}" --force
+    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/StratOS-Linux/StratOS-repo" --force
 }
 
 # Main function
