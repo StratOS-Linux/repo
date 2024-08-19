@@ -19,8 +19,16 @@ setup_environment() {
     sudo chown -R builder:builder /tmp/stratos-keyring
     cd /tmp/stratos-keyring
     rm -f *.pkg.tar.zst 2>/dev/null
-    sudo -u builder makepkg -si --noconfirm
-    echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = https://${git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|'}.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
+    sudo -u builder makepkg -cfs --noconfirm
+    rm -f $dir/x86_64/stratos-keyring.pkg.tar.zst
+    cp *.pkg.tar.zst $dir/x86_64/
+    sudo pacman -U $dir/x86_64/stratos-keyring.pkg.tar.zst
+    
+    cd $dir
+    
+    export URL="https://$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|').github.io/StratOS-repo/x86_64"
+    echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = https://StratOS-Linux.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
+    # echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = $URL" | sudo tee -a /etc/pacman.conf
     sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
     sudo sed -i 's/^#* *GPGKEY *=.*/GPGKEY="A046BE254138E0AC1BF5F66690D63B3FE2F217ED"/' /etc/makepkg.conf # add zstg's public key
     sed -i 's/^#*\(PACKAGER=\).*/\1"StratOS team <stratos-linux@gmail.com>"/' /etc/makepkg.conf
