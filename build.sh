@@ -14,16 +14,10 @@ trap 'handle_error $LINENO' ERR
 setup_environment() {
     dir=$(pwd)
     pacman-key --init
-    sudo rm -rf /tmp/stratos-keyring 2>/dev/null
-    cp -r $dir/PKGBUILDS/stratos-keyring /tmp
-    sudo chown -R builder:builder /tmp/stratos-keyring
-    cd /tmp/stratos-keyring
-    rm -f *.pkg.tar.zst 2>/dev/null
-    sudo -u builder makepkg -cfs --noconfirm
+    cd $dir/PKGBUILDS/stratos-keyring
+    sudo -u builder makepkg -fisc --noconfirm
     rm -f $dir/x86_64/stratos-keyring.pkg.tar.zst
-    cp *.pkg.tar.zst $dir/x86_64/
-    sudo pacman -U $dir/x86_64/stratos-keyring.pkg.tar.zst
-    
+    mv *.pkg.tar.zst $dir/x86_64/
     cd $dir
     
     export URL="https://$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|').github.io/StratOS-repo/x86_64"
