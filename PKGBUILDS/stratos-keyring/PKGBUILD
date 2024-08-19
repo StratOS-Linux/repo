@@ -1,24 +1,22 @@
-pkgname=stratos-keyring
-pkgver=20240804
-pkgrel=1
-pkgdesc='StratOS keyring'
-arch=('x86_64')
-url='https://stratos-linux.github.io'
-license=('GPL')
-install="${pkgname}.install"
-source=('https://raw.githubusercontent.com/stratos-linux/keyring/main/Makefile'
-        'https://raw.githubusercontent.com/stratos-linux/keyring/main/stratos.gpg'
-        'https://raw.githubusercontent.com/stratos-linux/keyring/main/stratos-revoked'
-        'https://raw.githubusercontent.com/stratos-linux/keyring/main/stratos-trusted')     
-validpgpkeys=(
-               'A046BE254138E0AC1BF5F66690D63B3FE2F217ED' # zstg
-             )  
-sha512sums=('SKIP'
-           'SKIP'
-           'SKIP'
-           'SKIP')
+# Maintainer: ZeStig <o0vckutt@duck.com>
 
+pkgname=stratos-keyring
+pkgver=20240819
+pkgrel=1
+pkgdesc="StratOS keyring"
+arch=(any)
+url="https://stratos-linux.github.io"
+license=('GPL-3.0-or-later')
+install=$pkgname.install
+source=("stratos.gpg"
+        "stratos-revoked"
+        "stratos-trusted"
+        "$install")
+
+sha512sums=('SKIP'
+            'SKIP'
+            'SKIP'
+            'SKIP')
 package() {
-	cd "${srcdir}"
-	make PREFIX=/usr DESTDIR="${pkgdir}" install
+    install -D -m0644 -t "${pkgdir}"/usr/share/pacman/keyrings/ 'stratos'{.gpg,-trusted,-revoked}
 }

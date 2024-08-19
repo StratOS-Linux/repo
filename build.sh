@@ -14,27 +14,15 @@ trap 'handle_error $LINENO' ERR
 setup_environment() {
     dir=$(pwd)
     pacman-key --init
-    rm -rf /tmp/stratos-keyring 2>/dev/null
+    sudo rm -rf /tmp/stratos-keyring 2>/dev/null
     cp -r $dir/PKGBUILDS/stratos-keyring /tmp
     sudo chown -R builder:builder /tmp/stratos-keyring
     cd /tmp/stratos-keyring
     rm -f *.pkg.tar.zst 2>/dev/null
     sudo -u builder makepkg -si --noconfirm
-    # sudo pacman-key --recv-keys A046BE254138E0AC1BF5F66690D63B3FE2F217ED
-    # sudo pacman-key --finger A046BE254138E0AC1BF5F66690D63B3FE2F217ED
-    sudo pacman-key --lsign A046BE254138E0AC1BF5F66690D63B3FE2F217ED
-    ## echo "A046BE254138E0AC1BF5F66690D63B3FE2F217ED:6:" | gpg --import-ownertrust -
-    ## echo "A046BE254138E0AC1BF5F66690D63B3FE2F217ED:6:" | sudo -u builder gpg --import-ownertrust -
-    ## echo -e "trust\n6\ny\nsave\n" | sudo pacman-key --edit-key A046BE254138E0AC1BF5F66690D63B3FE2F217ED
-    # Do this if you want the packages to show up with "Ultimate" trust - else they'll be "full"y trusted bcos of pacman-key
-    # sudo gpg --homedir /etc/pacman.d/gnupg --export-ownertrust > /etc/pacman.d/gnupg/ownertrust.txt
-    # echo "A046BE254138E0AC1BF5F66690D63B3FE2F217ED:6:" >> /etc/pacman.d/gnupg/ownertrust.txt
-    # sudo gpg --homedir /etc/pacman.d/gnupg --import-ownertrust < /etc/pacman.d/gnupg/ownertrust.txt    
-    # pacman-key --list-keys | tail -n 20
-    cd $dir
     echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = https://${git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|'}.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
     sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
-    # sudo sed -i 's/^#* *GPGKEY *=.*/GPGKEY="A046BE254138E0AC1BF5F66690D63B3FE2F217ED"/' /etc/makepkg.conf # add zstg's public key
+    sudo sed -i 's/^#* *GPGKEY *=.*/GPGKEY="A046BE254138E0AC1BF5F66690D63B3FE2F217ED"/' /etc/makepkg.conf # add zstg's public key
     sed -i 's/^#*\(PACKAGER=\).*/\1"StratOS team <stratos-linux@gmail.com>"/' /etc/makepkg.conf
 }
 
