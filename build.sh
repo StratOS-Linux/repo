@@ -86,15 +86,11 @@ build_and_package() {
     sudo pacman -U *.pkg.tar.zst --noconfirm
     cd $dir
 
-    cd /tmp
-    git clone https://aur.archlinux.org/calamares-git
-    sudo chmod -R 777 ./calamares-git
-    cd calamares-git
-    cp $dir/PKGBUILDS/calamares-git/* ./
+    cd $dir/PKGBUILDS/calamares-git
     sudo -u builder makepkg -cfs --noconfirm # --sign
-    rm -f **debug**.pkg.tar.zst
+    sudo rm -rf **debug**.pkg.tar.zst calamares/
     rm -f $dir/x86_64/**calamares**.pkg.tar.zst
-    cp *.pkg.tar.zst $dir/x86_64/
+    mv *.pkg.tar.zst $dir/x86_64/
     cd $dir
 
     mkdir -p /tmp/grab
@@ -123,7 +119,7 @@ build_and_package() {
     cd $dir
 
     local packages=(
-        # "albert" 
+        "albert" 
         "aura-bin"
         # "aurutils" 
         "bibata-cursor-theme-bin"
