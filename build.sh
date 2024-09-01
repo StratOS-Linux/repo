@@ -87,6 +87,7 @@ build_and_package() {
     cd $dir
 
     cd $dir/PKGBUILDS/calamares-git
+    sudo chmod -R 777 $dir/PKGBUILDS/calamares-git
     sudo -u builder makepkg -cfs --noconfirm # --sign
     sudo rm -rf **debug**.pkg.tar.zst calamares/
     rm -f $dir/x86_64/**calamares**.pkg.tar.zst
@@ -149,7 +150,7 @@ build_and_package() {
 
     for i in "${packages[@]}"; do
         git clone https://aur.archlinux.org/$i
-        sudo chmod -R 777 ./$i
+        sudo chmod -R 777 ./$i 
         cd $i
         mkdir -p $dir/PKGBUILDS/$i/
         cp PKGBUILD $dir/PKGBUILDS/$i/PKGBUILD
