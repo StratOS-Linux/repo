@@ -66,11 +66,12 @@ build_and_package() {
     cd $dir/PKGBUILDS/calamares
     sudo chmod -R 777 $dir/PKGBUILDS/calamares
     sudo -u builder makepkg -cfs --noconfirm # --sign
-    sudo rm -rf *.tar.gz **debug**.pkg.tar.zst calamares/ src/ pkg/ **qt5**.pkg.tar.zst
-    rm -f $dir/x86_64/**calamares**.pkg.tar.zst
+    echo "Removing Qt Calamares build..."
+    sudo rm -v **qt5**.pkg.tar.zst
+    sudo rm -rfv *.tar.gz **debug**.pkg.tar.zst calamares/ src/ pkg/
+    rm -fv $dir/x86_64/**calamares**.pkg.tar.zst
     mv *.pkg.tar.zst $dir/x86_64/
     cd $dir
-    exit 1
 
     mkdir -p /tmp/grab
     cp $dir/PKGBUILDS/grab/PKGBUILD /tmp/grab
