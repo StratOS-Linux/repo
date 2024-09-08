@@ -11,18 +11,9 @@ trap 'handle_error $LINENO' ERR
 [ -d /workspace ] && git config --global --add safe.directory /workspace && git config --global --add safe.directory /workspace/repoctl
 
 # Set up Arch Linux environment
-setup_environment() {
-    dir=$(pwd)
-    pacman-key --init
-    cd $dir/PKGBUILDS/stratos-keyring
-    sudo -u builder makepkg -fisc --noconfirm
-    rm -f $dir/x86_64/stratos-keyring.pkg.tar.zst
-    mv *.pkg.tar.zst $dir/x86_64/
-    cd $dir
-    
+setup_environment() {  
     export URL="https://$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|').github.io/StratOS-repo/x86_64"
-    echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = https://StratOS-Linux.github.io/StratOS-repo/x86_64" | sudo tee -a /etc/pacman.conf
-    # echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = $URL" | sudo tee -a /etc/pacman.conf
+    echo -e "\n[StratOS]\nSigLevel = Optional TrustAll\nServer = $URL" | sudo tee -a /etc/pacman.conf
     sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
     sudo sed -i 's/^#* *GPGKEY *=.*/GPGKEY="19A421C3D15C8B7C672F0FACC4B8A73AB86B9411"/' /etc/makepkg.conf # add zstg's public key
     sed -i 's/^#*\(PACKAGER=\).*/\1"StratOS team <stratos-linux@gmail.com>"/' /etc/makepkg.conf
@@ -46,52 +37,40 @@ build_and_package() {
 
     # # sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm
     # sudo pacman -U $dir/x86_64/repoctl-0.22.2-1-x86_64.pkg.tar.zst --noconfirm
-    cd $dir/PKGBUILDS/rockers/
-    sudo chmod -R 777 ../rockers
-    sudo -u builder makepkg -cfs --noconfirm # --sign
-    rm -f **debug**.pkg.tar.zst
-    rm -rf src/ pkg/
-    mv *.pkg.tar.zst $dir/x86_64/
-    cd $dir/
+    # cd $dir/PKGBUILDS/rockers/
+    # sudo chmod -R 777 ../rockers
+    # sudo -u builder makepkg -cfs --noconfirm # --sign
+    # rm -f **debug**.pkg.tar.zst
+    # rm -rf src/ pkg/
+    # mv *.pkg.tar.zst $dir/x86_64/
+    # cd $dir/
 
-    mkdir -p /tmp/litefm && chmod -R 777 /tmp/litefm
-    cp $dir/PKGBUILDS/litefm/PKGBUILD /tmp/litefm
-    cd /tmp/litefm
-    rm -f $dir/x86_64/**litefm**.pkg.tar.zst
-    sudo -u builder makepkg -cfs --noconfirm # --sign
-    mv *.pkg.tar.zst $dir/x86_64/
-    cd $dir/
+    # mkdir -p /tmp/litefm && chmod -R 777 /tmp/litefm
+    # cp $dir/PKGBUILDS/litefm/PKGBUILD /tmp/litefm
+    # cd /tmp/litefm
+    # rm -f $dir/x86_64/**litefm**.pkg.tar.zst
+    # sudo -u builder makepkg -cfs --noconfirm # --sign
+    # mv *.pkg.tar.zst $dir/x86_64/
+    # cd $dir/
 
-    cd /tmp
-    git clone https://aur.archlinux.org/kpmcore-git
-    sudo chmod -R 777 ./kpmcore-git
-    cd kpmcore-git
-    sudo -u builder makepkg -cfs --noconfirm # --sign
-    rm -f **debug**.pkg.tar.zst
-    rm -f $dir/x86_64/**kpmcore**.pkg.tar.zst
-    cp *.pkg.tar.zst $dir/x86_64/
-    cp PKGBUILD $dir/PKGBUILDS/kpmcore-git/PKGBUILD
-    sudo pacman -U *.pkg.tar.zst --noconfirm
-    cd ..
-    rm -rf kpmcore-git
-    cd $dir
+    # mkdir -p /tmp/ckbcomp
+    # cp $dir/PKGBUILDS/ckbcomp/PKGBUILD /tmp/ckbcomp
+    # cd /tmp/ckbcomp
+    # sudo chmod -R 777 /tmp/ckbcomp
+    # sudo -u builder makepkg -cfs --noconfirm
+    # rm -f **debug**.pkg.tar.zst
+    # cp *.pkg.tar.zst $dir/x86_64/
+    # sudo pacman -U *.pkg.tar.zst --noconfirm
+    # cd $dir
 
-    mkdir -p /tmp/ckbcomp
-    cp $dir/PKGBUILDS/ckbcomp/PKGBUILD /tmp/ckbcomp
-    cd /tmp/ckbcomp
-    sudo chmod -R 777 /tmp/ckbcomp
-    sudo -u builder makepkg -cfs --noconfirm
-    rm -f **debug**.pkg.tar.zst
-    cp *.pkg.tar.zst $dir/x86_64/
-    sudo pacman -U *.pkg.tar.zst --noconfirm
-    cd $dir
-
-    cd $dir/PKGBUILDS/calamares-git
-    sudo chmod -R 777 $dir/PKGBUILDS/calamares-git
+    cd $dir/PKGBUILDS/calamares
+    sudo chmod -R 777 $dir/PKGBUILDS/calamares
     sudo -u builder makepkg -cfs --noconfirm # --sign
-    sudo rm -rf **debug**.pkg.tar.zst calamares/
-    rm -f $dir/x86_64/**calamares**.pkg.tar.zst
-    mv *.pkg.tar.zst $dir/x86_64/
+    echo "Removing Qt Calamares build..."
+    sudo rm -v **qt5**.pkg.tar.zst
+    sudo rm -rfv *.tar.gz **debug**.pkg.tar.zst calamares/ src/ pkg/
+    rm -fv $dir/x86_64/**calamares**.pkg.tar.zst
+    mv -v *.pkg.tar.zst $dir/x86_64/
     cd $dir
 
     mkdir -p /tmp/grab
@@ -161,12 +140,13 @@ build_and_package() {
         rm -rf $i
     done
     # sudo pacman -U $dir/x86_64/**repoctl** --noconfirm
-    sudo pacman -U $dir/x86_64/**aurutils** --noconfirm
+    # sudo pacman -U $dir/x86_64/**aurutils** --noconfirm
     
 }
 
 # Initialize and push to GitHub
 initialize_and_push() {
+    export URL="$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|')"
     cd $dir
     bash ./initialize.sh
     sudo git config --global user.name 'github-actions[bot]'
@@ -174,7 +154,7 @@ initialize_and_push() {
     sudo git add .
     sudo git commit -am "Update packages"
     sudo git pull
-    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/StratOS-Linux/StratOS-repo" --force
+    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/$URL/StratOS-repo" --force
 }
 
 # Main function

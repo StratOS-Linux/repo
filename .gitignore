@@ -1,2 +1,5 @@
 .env
 /workspace
+/workspace/StratOS-repo/PKGBUILDS/calamares/*.tar.gz
+/workspace/StratOS-repo/PKGBUILDS/calamares/src
+/workspace/StratOS-repo/PKGBUILDS/calamares/pkg
