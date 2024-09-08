@@ -70,6 +70,7 @@ build_and_package() {
     rm -f $dir/x86_64/**calamares**.pkg.tar.zst
     mv *.pkg.tar.zst $dir/x86_64/
     cd $dir
+    exit 1
 
     mkdir -p /tmp/grab
     cp $dir/PKGBUILDS/grab/PKGBUILD /tmp/grab
@@ -138,12 +139,13 @@ build_and_package() {
         rm -rf $i
     done
     # sudo pacman -U $dir/x86_64/**repoctl** --noconfirm
-    sudo pacman -U $dir/x86_64/**aurutils** --noconfirm
+    # sudo pacman -U $dir/x86_64/**aurutils** --noconfirm
     
 }
 
 # Initialize and push to GitHub
 initialize_and_push() {
+    export URL="https://$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|')"
     cd $dir
     bash ./initialize.sh
     sudo git config --global user.name 'github-actions[bot]'
@@ -151,7 +153,7 @@ initialize_and_push() {
     sudo git add .
     sudo git commit -am "Update packages"
     sudo git pull
-    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/StratOS-Linux/StratOS-repo" --force
+    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/$URL/StratOS-repo" --force
 }
 
 # Main function
