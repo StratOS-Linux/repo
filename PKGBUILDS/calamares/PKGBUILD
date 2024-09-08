@@ -145,7 +145,9 @@ build() {
 }
 
 package_calamares() {
-	depends=('kconfig>=5.246'
+	depends=(
+		'ckbcomp'
+		'kconfig>=5.246'
 		'kcoreaddons>=5.246'
 		'ki18n>=5.246'
 		'kiconthemes>=5.246'
@@ -166,20 +168,9 @@ package_calamares() {
 }
 
 package_calamares-qt5() {
-	depends=('kconfig5>=5.113.0'
-		'kcoreaddons5>=5.113.0'
-		'kiconthemes5>=5.113.0'
-		'ki18n5>=5.113.0'
-		'kio5>=5.113.0'
-		'solid5>=5.113.0'
-		'qt5-base>=5.15.11'
-		'qt5-svg>=5.15.11'
-		'polkit-qt5>=0.175.0'
-		'plasma-framework5>=5.58'
-		'qt5-xmlpatterns>=5.15.11')
-
+	depends=()
 	# This doesn't need to be built
-	echo Bye!
+	echo Skipping Qt5 build.
 	# cd "${srcdir}/${pkgname}-${pkgver}/build" || return
 	# make DESTDIR="$pkgdir" install
 	# install -Dm644 "${srcdir}/calamares.desktop" "$pkgdir/etc/xdg/autostart/calamares.desktop"

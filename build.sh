@@ -82,20 +82,13 @@ build_and_package() {
     cp *.pkg.tar.zst $dir/x86_64/
     cd $dir
 
-    cd /tmp
-    rm -rf /tmp/repoctl
-    git clone https://aur.archlinux.org/repoctl.git
-    sudo chmod -R 777 ./repoctl
-    sudo git config --global --add safe.directory /tmp/repoctl
-    sudo -u builder git config --global --add safe.directory /tmp/repoctl
-    cd repoctl
-    sudo -u builder makepkg -cfs --noconfirm # --sign
+    mkdir -p /tmp/maneki-neko
+    cp $dir/PKGBUILDS/maneki-neko/PKGBUILD /tmp/maneki-neko
+    cd /tmp/maneki-neko
+    sudo chmod -R 777 /tmp/maneki-neko
+    sudo -u builder makepkg -cfs --noconfirm
     rm -f **debug**.pkg.tar.zst
-    rm -f $dir/x86_64/**repoctl**.pkg.tar.zst
     cp *.pkg.tar.zst $dir/x86_64/
-    cp PKGBUILD $dir/PKGBUILDS/repoctl/PKGBUILD
-    sudo pacman -U *.pkg.tar.zst --noconfirm
-    rm -rf ../repoctl
     cd $dir
 
     local packages=(
@@ -104,7 +97,6 @@ build_and_package() {
         # "aurutils" 
         "bibata-cursor-theme-bin"
         # "brave-bin"
-        # "calamares-git" 
         # #"eww"
         # "google-chrome"
         # "gruvbox-plus-icon-theme-git" 
@@ -114,7 +106,7 @@ build_and_package() {
         "nwg-dock-hyprland-bin" 
         # "octopi"
         "oh-my-zsh-git"
-        # "pamac-all"
+        "pamac-all"
         "pandoc-bin" 
         "python-clickgen"
         "pyprland"

@@ -1,0 +1,26 @@
+# Maintainer: Adithya Sunil Kumar <adithyasunil[at]gmail.com>
+# Contributor: ZeStig <zestig@duck.com>
+
+pkgname=maneki-neko
+pkgver=1.0.0
+pkgrel=1
+pkgdesc='Stratos welcome app'
+arch=('x86_64')
+url='https://github.com/zstg/maneki-neko'
+license=('GPL')
+depends=('python' 'python-pyqt5' 'qt5-wayland')
+# makedepends=('python-build' 'python-installer' 'python-wheel' 'python-setuptools')
+validpgpkeys=('SKIP')
+
+source=("$pkgname::git+$url")
+md5sums=('SKIP')
+
+package() {
+    # Install the package in /opt
+    install -d "$pkgdir/opt/$pkgname"
+    cp -r "$srcdir/$pkgname"/* "$pkgdir/opt/$pkgname/"
+
+    # Create a symlink to /usr/local/bin
+    install -d "$pkgdir/usr/local/bin"
+    ln -sf "/opt/$pkgname/main.py" "$pkgdir/usr/local/bin/$pkgname"
+}
