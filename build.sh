@@ -13,7 +13,7 @@ trap 'handle_error $LINENO' ERR
 # Set up Arch Linux environment
 setup_environment() {  
     export URL="https://$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|').github.io/StratOS-repo/x86_64"
-    echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = $URL" | sudo tee -a /etc/pacman.conf
+    echo -e "\n[StratOS]\nSigLevel = Optional TrustAll\nServer = $URL" | sudo tee -a /etc/pacman.conf
     sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
     sudo sed -i 's/^#* *GPGKEY *=.*/GPGKEY="19A421C3D15C8B7C672F0FACC4B8A73AB86B9411"/' /etc/makepkg.conf # add zstg's public key
     sed -i 's/^#*\(PACKAGER=\).*/\1"StratOS team <stratos-linux@gmail.com>"/' /etc/makepkg.conf
@@ -70,7 +70,7 @@ build_and_package() {
     sudo rm -v **qt5**.pkg.tar.zst
     sudo rm -rfv *.tar.gz **debug**.pkg.tar.zst calamares/ src/ pkg/
     rm -fv $dir/x86_64/**calamares**.pkg.tar.zst
-    mv *.pkg.tar.zst $dir/x86_64/
+    mv -v *.pkg.tar.zst $dir/x86_64/
     cd $dir
 
     mkdir -p /tmp/grab
@@ -146,7 +146,7 @@ build_and_package() {
 
 # Initialize and push to GitHub
 initialize_and_push() {
-    export URL="https://$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|')"
+    export URL="$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|')"
     cd $dir
     bash ./initialize.sh
     sudo git config --global user.name 'github-actions[bot]'
