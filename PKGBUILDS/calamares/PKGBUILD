@@ -153,7 +153,9 @@ package_calamares() {
 		'polkit-qt6>=0.175.0'
 		'qt6-base>=6.6.0'
 		'qt6-svg>=6.6.0'
-		'solid>=5.246')
+		'solid>=5.246'
+  		'yaml-cpp'
+		'libpwquality')
 
 	cd "${srcdir}/${pkgname}-${pkgver}/build" || return
 	make DESTDIR="$pkgdir" install
