@@ -3,7 +3,7 @@
 
 _pkgname="calamares"
 pkgname="$_pkgname-git"
-pkgver=3.3.9.r20.ga904466
+pkgver=3.3.10.r13.g5fc2b27
 pkgrel=1
 pkgdesc="Distribution-independent installer framework"
 url="https://github.com/calamares/calamares"
@@ -12,7 +12,7 @@ arch=('i686' 'x86_64')
 
 depends=(
   'boost-libs'
-  'ckbcomp'
+  # 'ckbcomp'
   'hwinfo'
   'kconfig'
   'kcoreaddons'
@@ -53,7 +53,7 @@ source=(
   "com.github.calamares.calamares.policy"
   # "49-nopasswd-calamares.rules"
   "$_pkgsrc"::"git+$url.git"
-  "yay-support.patch"
+  "paru-support.patch"
   "calamares.desktop"
 )
 sha256sums=(
@@ -97,7 +97,7 @@ pkgver() {
 
 prepare() {
   cd "$_pkgsrc"
-  git apply ../yay-support.patch
+  git apply ../paru-support.patch
 }
 
 
@@ -123,7 +123,7 @@ build() {
     -G Ninja
 
     -DCMAKE_BUILD_TYPE=Release
-    -DCMAKE_INSTALL_PREFIX='/usr'
+    -DCMAKE_INSTALL_PREFIX="/usr"
     -DCMAKE_INSTALL_LIBDIR='lib'
     -DWITH_QT6=ON
     -DINSTALL_CONFIG=ON
@@ -135,11 +135,11 @@ build() {
 
   cmake "${_cmake_options[@]}"
   cmake --build build
-  install -Dm644 "calamares.desktop" "$pkgdir/usr/share/applications/calamares.desktop"
-  install -Dm777 "calamares.desktop" "$pkgdir/etc/xdg/autostart/Calamares.desktop"
-  install -Dm777 "com.github.calamares.calamares.policy" "$pkgdir/usr/share/polkit-1/actions/com.github.calamares.calamares.policy"
+  sudo -E install -Dm777 "calamares.desktop" "$pkgdir/usr/share/applications/calamares.desktop"
+  sudo -E install -Dm777 "calamares.desktop" "$pkgdir/etc/xdg/autostart/Calamares.desktop"
+  sudo -E install -Dm777 "com.github.calamares.calamares.policy" "$pkgdir/usr/share/polkit-1/actions/com.github.calamares.calamares.policy"
 }
 
 package() {
-  DESTDIR="$pkgdir" cmake --install build
+  DESTDIR="$pkgdir" sudo -E cmake --install build
 }
