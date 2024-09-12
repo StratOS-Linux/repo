@@ -21,7 +21,7 @@ setup_environment() {
 
 # Create dummy user for makepkg
 create_dummy_user() {
-    dir=$(pwd)
+    dir=$PWD
     sudo useradd -m builder -s /bin/bash
     sudo usermod -aG wheel builder
     echo '%wheel ALL=(ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers
@@ -32,7 +32,7 @@ create_dummy_user() {
 # Build and package software
 build_and_package() {
     sudo pacman -Sy
-    dir="$(pwd)"
+    dir="$PWD"
     sudo git config --global init.defaultBranch main
 
     # # sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm
@@ -63,33 +63,33 @@ build_and_package() {
     # sudo pacman -U *.pkg.tar.zst --noconfirm
     # cd $dir
 
-    cd $dir/PKGBUILDS/calamares
-    sudo chmod -R 777 $dir/PKGBUILDS/calamares
+    cd "$dir"/PKGBUILDS/calamares
+    sudo chmod -R 777 "$dir"/PKGBUILDS/calamares
     sudo -u builder makepkg -cfs --noconfirm # --sign
     echo "Removing Qt Calamares build..."
     sudo rm -v **qt5**.pkg.tar.zst
     sudo rm -rfv *.tar.gz **debug**.pkg.tar.zst calamares/ src/ pkg/
-    rm -fv $dir/x86_64/**calamares**.pkg.tar.zst
-    mv -v *.pkg.tar.zst $dir/x86_64/
-    cd $dir
+    rm -fv "$dir"/x86_64/**calamares**.pkg.tar.zst
+    mv -v *.pkg.tar.zst "$dir"/x86_64/
+    cd "$dir"
 
     mkdir -p /tmp/grab
-    cp $dir/PKGBUILDS/grab/PKGBUILD /tmp/grab
+    cp "$dir"/PKGBUILDS/grab/PKGBUILD /tmp/grab
     cd /tmp/grab
     sudo chmod -R 777 /tmp/grab
     sudo -u builder makepkg -cfs --noconfirm
     rm -f **debug**.pkg.tar.zst
-    cp *.pkg.tar.zst $dir/x86_64/
-    cd $dir
+    cp *.pkg.tar.zst "$dir"/x86_64/
+    cd "$dir"
 
     mkdir -p /tmp/maneki-neko
-    cp $dir/PKGBUILDS/maneki-neko/PKGBUILD /tmp/maneki-neko
+    cp "$dir"/PKGBUILDS/maneki-neko/PKGBUILD /tmp/maneki-neko
     cd /tmp/maneki-neko
     sudo chmod -R 777 /tmp/maneki-neko
     sudo -u builder makepkg -cfs --noconfirm
     rm -f **debug**.pkg.tar.zst
-    cp *.pkg.tar.zst $dir/x86_64/
-    cd $dir
+    cp *.pkg.tar.zst "$dir"/x86_64/
+    cd "$dir"
 
     local packages=(
         "albert" 
@@ -112,24 +112,24 @@ build_and_package() {
         "pyprland"
         # #"repoctl"
         # "rua"
-        # "swayfx"
-        # "sway-nvidia"
+        "swayfx"
+        "sway-nvidia"
         # #"swayosd-git"
         "ventoy-bin" 
         "yay-bin"
     )
 
     for i in "${packages[@]}"; do
-        git clone https://aur.archlinux.org/$i
-        sudo chmod -R 777 ./$i 
-        cd $i
-        mkdir -p $dir/PKGBUILDS/$i/
-        cp PKGBUILD $dir/PKGBUILDS/$i/PKGBUILD
+        git clone https://aur.archlinux.org/"$i"
+        sudo chmod -R 777 ./"$i" 
+        cd "$i"
+        mkdir -p "$dir/PKGBUILDS/$i"/
+        cp PKGBUILD "$dir/PKGBUILDS/$i"/PKGBUILD
         sudo -u builder makepkg -cfs --noconfirm # --sign
-        rm -rf $dir/x86_64/"$i"**.pkg.tar.zst
-        mv *.pkg.tar.zst $dir/x86_64/
+        rm -rf "$dir/x86_64/$i"**.pkg.tar.zst
+        mv *.pkg.tar.zst "$dir"/x86_64/
         cd ..
-        rm -rf $i
+        rm -rf "$i"
     done
     # sudo pacman -U $dir/x86_64/**repoctl** --noconfirm
     # sudo pacman -U $dir/x86_64/**aurutils** --noconfirm
@@ -139,7 +139,7 @@ build_and_package() {
 # Initialize and push to GitHub
 initialize_and_push() {
     export URL="$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|')"
-    cd $dir
+    cd "$dir"
     bash ./initialize.sh
     sudo git config --global user.name 'github-actions[bot]'
     sudo git config --global user.email 'github-actions[bot]@users.noreply.github.com'
@@ -158,7 +158,7 @@ main() {
 }
 
 # Ensure GITHUB_TOKEN is set
-if [ ! -d "/workspace" ] && [ -z "$GITHUB_TOKEN" ]; then
+if [ ! -d "/workspace" ] && [ "$GITHUB_TOKEN" = "" ]; then
     echo "GITHUB_TOKEN is not set. Please set it - following the instructions in README.md - before running this script."
     exit 1
 fi
