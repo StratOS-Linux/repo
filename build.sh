@@ -12,8 +12,8 @@ trap 'handle_error $LINENO' ERR
 
 # Set up Arch Linux environment
 setup_environment() {  
-    export URL="https://$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|').github.io/StratOS-repo/x86_64"
-    echo -e "\n[StratOS-repo]\nSigLevel = Optional TrustAll\nServer = $URL" | sudo tee -a /etc/pacman.conf
+    export REPO="https://$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|').github.io/repo/x86_64"
+    echo -e "\n[StratOS]\nSigLevel = Optional TrustAll\nServer = $URL" | sudo tee -a /etc/pacman.conf
     sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
     sudo sed -i 's/^#* *GPGKEY *=.*/GPGKEY="19A421C3D15C8B7C672F0FACC4B8A73AB86B9411"/' /etc/makepkg.conf # add zstg's public key
     sed -i 's/^#*\(PACKAGER=\).*/\1"StratOS team <stratos-linux@gmail.com>"/' /etc/makepkg.conf
@@ -138,7 +138,7 @@ build_and_package() {
 
 # Initialize and push to GitHub
 initialize_and_push() {
-    export URL="$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|')"
+    export REPO="$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1/\2|')"
     cd "$dir"
     bash ./initialize.sh
     sudo git config --global user.name 'github-actions[bot]'
@@ -146,7 +146,7 @@ initialize_and_push() {
     sudo git add .
     sudo git commit -am "Update packages"
     sudo git pull
-    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/$URL/StratOS-repo" --force
+    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/$REPO" --force
 }
 
 # Main function
