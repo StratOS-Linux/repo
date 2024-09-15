@@ -23,7 +23,7 @@ Server = https://StratOS-Linux.github.io/repo/x86_64
 - Simply run `docker-compose up` (optionally with the `-d` flag to detach the container).
 
 ## If you want to contribute:
-- Fork this repository, say to `username/StratOS-repo`.
+- Fork this repository, say to `username/repo`.
 - Create a Github personal access token [here](https://github.com/settings/tokens). 
 - Copy the newly generated token and add it as the `GITHUB_TOKEN` environment variable following [these](https://www.gitpod.io/blog/securely-manage-development-secrets-with-doppler-and-gitpod#automating-doppler-secrets-injection-on-gitpod) instructions. 
 - Open https://gitpod.io/#https://github.com/username/StratOS-repo. Replace `username` with your actual GitHub username.
