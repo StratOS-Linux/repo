@@ -13,7 +13,7 @@
 - To add this repo to your Arch distribution, open `/etc/pacman.conf` and add this at the end :
 
 ```
-[StratOS-repo]
+[stratos]
 SigLevel = Optional TrustAll
 Server = https://StratOS-Linux.github.io/repo/x86_64
 ```

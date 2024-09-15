@@ -145,7 +145,7 @@ initialize_and_push() {
     sudo git config --global user.email 'github-actions[bot]@users.noreply.github.com'
     sudo git add .
     sudo git commit -am "Update packages"
-    sudo git pull
+    # sudo git pull
     sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/$URL/repo" --force
 }
 
