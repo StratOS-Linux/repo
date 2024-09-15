@@ -6,7 +6,7 @@
 
 - A custom Arch repo hosted on GitHub
 
-- Meant for use in [StratOS](https://github.com/StratOS-Linux/StratOS-iso) (An Arch-based meta-distro developed by the StratOS Team)
+- Meant for use in [StratOS](https://github.com/StratOS-Linux/gnome-iso) (An Arch-based meta-distro developed by the StratOS Team)
 
 ## Installation
 
@@ -15,7 +15,7 @@
 ```
 [StratOS-repo]
 SigLevel = Optional TrustAll
-Server = https://StratOS-Linux.github.io/StratOS-repo/x86_64
+Server = https://StratOS-Linux.github.io/repo/x86_64
 ```
 
 ## Building packages:
