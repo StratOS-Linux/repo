@@ -12,6 +12,11 @@ trap 'handle_error $LINENO' ERR
 
 # Set up Arch Linux environment
 setup_environment() {  
+    git config --global http.lowSpeedLimit 0
+    git config --global http.lowSpeedTime 999999
+    git config --global http.noEPSV true
+    git config --global http.postBuffer 15728640000
+
     export URL="https://$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|').github.io/repo/x86_64"
     echo -e "\n[stratos]\nSigLevel = Optional TrustAll\nServer = $URL" | sudo tee -a /etc/pacman.conf
     sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
