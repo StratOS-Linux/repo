@@ -17,5 +17,3 @@ package() {
   install -Dm644 sway-nvidia.desktop "$pkgdir/usr/share/wayland-sessions/sway-nvidia.desktop"
   install -Dm644 wlroots-env-nvidia.sh "$pkgdir/usr/share/wlroots-nvidia/wlroots-env-nvidia.sh"
 }
-
-
