@@ -37,6 +37,7 @@ create_dummy_user() {
 # Build and package software
 build_and_package() {
     sudo pacman -Sy
+    sudo pacman -S fakeroot --noconfirm
     dir="$PWD"
     sudo git config --global init.defaultBranch main
 
