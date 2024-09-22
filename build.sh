@@ -5,7 +5,13 @@ handle_error() {
     echo "Error on line $1"
     exit 1
 }
-
+# Ensure GITHUB_TOKEN is set
+if [ ! -d "/workspace" ] && [ "$GITHUB_TOKEN" = "" ]; then
+    echo "GITHUB_TOKEN is not set. Please set it - following the instructions in README.md - before running this script."
+    git config --global --add safe.directory /workspace 
+    # git config --global --add safe.directory /workspace/repoctl
+    exit 1
+fi
 # Trap errors
 trap 'handle_error $LINENO' ERR
 
@@ -167,6 +173,7 @@ build_and_package() {
 initialize_and_push() {
     export URL="$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|')"
     cd "$dir"
+    git config --global --add safe.directory /workspace # unnecessary
     repo-remove x86_64/stratos.db.tar.xz
     repo-add -R x86_64/stratos.db.tar.xz x86_64/*.pkg.tar.zst
     sudo git config --global user.name 'github-actions[bot]'
@@ -183,14 +190,5 @@ main() {
     build_and_package
     initialize_and_push
 }
-
-# Ensure GITHUB_TOKEN is set
-if [ ! -d "/workspace" ] && [ "$GITHUB_TOKEN" = "" ]; then
-    echo "GITHUB_TOKEN is not set. Please set it - following the instructions in README.md - before running this script."
-    git config --global --add safe.directory /workspace 
-    # git config --global --add safe.directory /workspace/repoctl
-    exit 1
-fi
-
 # Execute main function
 main
