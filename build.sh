@@ -58,7 +58,7 @@ clone_and_build_if_needed() {
         mkdir -p "$dir/PKGBUILDS/$package/"
         cp PKGBUILD "$dir/PKGBUILDS/$package"/PKGBUILD
         sudo -u builder makepkg -cfs --noconfirm
-        rm -rf "$dir/x86_64/$package"**.pkg.tar.zst
+        # rm -rf "$dir/x86_64/$package"**.pkg.tar.zst
         mv *.pkg.tar.zst "$dir"/x86_64/
         cd ..
         rm -rf "$package"
@@ -167,7 +167,8 @@ build_and_package() {
 initialize_and_push() {
     export URL="$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|')"
     cd "$dir"
-    bash ./initialize.sh
+    repo-remove x86_64/stratos.db.tar.xz
+    repo-add -R x86_64/stratos.db.tar.xz x86_64/*.pkg.tar.zst
     sudo git config --global user.name 'github-actions[bot]'
     sudo git config --global user.email 'github-actions[bot]@users.noreply.github.com'
     sudo git add .
@@ -186,6 +187,8 @@ main() {
 # Ensure GITHUB_TOKEN is set
 if [ ! -d "/workspace" ] && [ "$GITHUB_TOKEN" = "" ]; then
     echo "GITHUB_TOKEN is not set. Please set it - following the instructions in README.md - before running this script."
+    git config --global --add safe.directory /workspace 
+    # git config --global --add safe.directory /workspace/repoctl
     exit 1
 fi
 
