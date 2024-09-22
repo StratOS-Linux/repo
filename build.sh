@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# set -e # exit on error
 # Function to handle errors
 handle_error() {
     echo "Error on line $1"
@@ -114,12 +114,12 @@ build_and_package() {
         "pamac-all"
         "pandoc-bin" 
         "python-clickgen"
-        "pyprland"
+        # "pyprland"
         # #"repoctl"
         # "rua"
         "swayfx"
         "sway-nvidia"
-        # #"swayosd-git"
+        "swayosd-git"
         "ventoy-bin" 
         "yay-bin"
     )
