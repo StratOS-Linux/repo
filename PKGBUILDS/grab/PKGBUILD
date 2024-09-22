@@ -6,7 +6,7 @@ pkgdesc="Definitely not a system info fetch script"
 arch=('x86_64')
 url="https://github.com/StratOS-Linux/grab"
 license=('GPL')
-depends=('gcc' 'make') 
+depends=('gcc' 'make' 'fakeroot') 
 
 prepare() {
   cd "$srcdir"
