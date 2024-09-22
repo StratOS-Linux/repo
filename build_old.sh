@@ -1,5 +1,5 @@
 #!/bin/bash
-# set -e
+# set -e # exit on error
 # Function to handle errors
 handle_error() {
     echo "Error on line $1"
@@ -8,6 +8,7 @@ handle_error() {
 
 # Trap errors
 trap 'handle_error $LINENO' ERR
+[ -d /workspace ] && git config --global --add safe.directory /workspace && git config --global --add safe.directory /workspace/repoctl
 
 # Set up Arch Linux environment
 setup_environment() {  
@@ -17,54 +18,20 @@ setup_environment() {
     git config --global http.postBuffer 15728640000
 
     export URL="https://$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|').github.io/repo/x86_64"
+    # echo -e "\n[stratos]\nSigLevel = Optional TrustAll\nServer = $URL" | sudo tee -a /etc/pacman.conf
     sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
-    sudo sed -i 's/^#* *GPGKEY *=.*/GPGKEY="19A421C3D15C8B7C672F0FACC4B8A73AB86B9411"/' /etc/makepkg.conf
+    sudo sed -i 's/^#* *GPGKEY *=.*/GPGKEY="19A421C3D15C8B7C672F0FACC4B8A73AB86B9411"/' /etc/makepkg.conf # add zstg's public key
     sed -i 's/^#*\(PACKAGER=\).*/\1"StratOS team <stratos-linux@gmail.com>"/' /etc/makepkg.conf
 }
 
 # Create dummy user for makepkg
 create_dummy_user() {
+    dir=$PWD
     sudo useradd -m builder -s /bin/bash
     sudo usermod -aG wheel builder
     echo '%wheel ALL=(ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers
     sudo -u builder curl -sS https://github.com/elkowar.gpg | gpg --dearmor > elkowar.gpg && sudo pacman-key --add elkowar.gpg
     sudo -u builder curl -sS https://github.com/web-flow.gpg | gpg --dearmor > web-flow.gpg && sudo pacman-key --add web-flow.gpg
-}
-
-# Function to check version differences and build package
-clone_and_build_if_needed() {
-    local package="$1"
-    local dir="$2"
-
-    # Get local version (from PKGBUILD if it exists)
-    if [ -f "$dir/PKGBUILDS/$package/PKGBUILD" ]; then
-        local local_version
-        local_version=$(grep -Po '(?<=pkgver=)[\d\w.]+' "$dir/PKGBUILDS/$package/PKGBUILD")
-    else
-        local_version="none"
-    fi
-
-    # Get AUR version (from AUR's .SRCINFO file)
-    local aur_version
-    aur_version=$(curl -s "https://aur.archlinux.org/cgit/aur.git/plain/.SRCINFO?h=$package" | grep -Po '(?<=pkgver = )[\d\w.]+')
-
-    echo "Checking $package: local version = $local_version, AUR version = $aur_version"
-
-    # Only clone and build if versions differ
-    if [ "$local_version" != "$aur_version" ]; then
-        git clone https://aur.archlinux.org/"$package".git
-        sudo chmod -R 777 ./"$package" 
-        cd "$package"
-        mkdir -p "$dir/PKGBUILDS/$package/"
-        cp PKGBUILD "$dir/PKGBUILDS/$package"/PKGBUILD
-        sudo -u builder makepkg -cfs --noconfirm
-        rm -rf "$dir/x86_64/$package"**.pkg.tar.zst
-        mv *.pkg.tar.zst "$dir"/x86_64/
-        cd ..
-        rm -rf "$package"
-    else
-        echo "$package is on latest AUR version, doesn't need a rebuild"
-    fi
 }
 
 # Build and package software
@@ -73,38 +40,7 @@ build_and_package() {
     sudo pacman -S fakeroot --noconfirm
     dir="$PWD"
     sudo git config --global init.defaultBranch main
-
-    local packages=(
-        "albert" 
-        # "aura-bin"
-          # "aurutils"
-        "bibata-cursor-theme-bin"
-          # "brave-bin"
-          # #"eww"    
-          # "google-chrome"
-          # "gruvbox-plus-icon-theme-git" 
-          # "libadwaita-without-adwaita-git" 
-          # "mkinitcpio-openswap" 
-          # "nwg-clipman"
-        "nwg-dock-hyprland-bin" 
-          # "octopi"
-        # "oh-my-zsh-git"
-        # "pamac-all"
-        "pandoc-bin" 
-        # "python-clickgen"
-          # "pyprland"
-          # #"repoctl"
-          # "rua"
-        # "swayfx"
-        # "sway-nvidia"
-        "swayosd-git"
-        # "ventoy-bin" 
-        "yay-bin"
-    )
-
-    for i in "${packages[@]}"; do
-        clone_and_build_if_needed "$i" "$dir"
-    done
+    
 
     # # sudo pacman -U $dir/x86_64/ckbcomp-1.227-1-any.pkg.tar.zst --noconfirm
     # sudo pacman -U $dir/x86_64/repoctl-0.22.2-1-x86_64.pkg.tar.zst --noconfirm
@@ -144,23 +80,69 @@ build_and_package() {
     # mv -v *.pkg.tar.zst "$dir"/x86_64/
     # cd "$dir"
 
-    # mkdir -p /tmp/grab
-    # cp "$dir"/PKGBUILDS/grab/PKGBUILD /tmp/grab
-    # cd /tmp/grab
-    # sudo chmod -R 777 /tmp/grab
-    # sudo -u builder makepkg -cfs --noconfirm
-    # rm -f **debug**.pkg.tar.zst
-    # cp *.pkg.tar.zst "$dir"/x86_64/
-    # cd "$dir"
+    mkdir -p /tmp/grab
+    cp "$dir"/PKGBUILDS/grab/PKGBUILD /tmp/grab
+    cd /tmp/grab
+    sudo chmod -R 777 /tmp/grab
+    sudo -u builder makepkg -cfs --noconfirm
+    rm -f **debug**.pkg.tar.zst
+    cp *.pkg.tar.zst "$dir"/x86_64/
+    cd "$dir"
 
-    # mkdir -p /tmp/maneki-neko
-    # cp "$dir"/PKGBUILDS/maneki-neko/PKGBUILD /tmp/maneki-neko
-    # cd /tmp/maneki-neko
-    # sudo chmod -R 777 /tmp/maneki-neko
-    # sudo -u builder makepkg -cfs --noconfirm
-    # rm -f **debug**.pkg.tar.zst
-    # cp *.pkg.tar.zst "$dir"/x86_64/
-    # cd "$dir"
+    mkdir -p /tmp/maneki-neko
+    cp "$dir"/PKGBUILDS/maneki-neko/PKGBUILD /tmp/maneki-neko
+    cd /tmp/maneki-neko
+    sudo chmod -R 777 /tmp/maneki-neko
+    sudo -u builder makepkg -cfs --noconfirm
+    rm -f **debug**.pkg.tar.zst
+    cp *.pkg.tar.zst "$dir"/x86_64/
+    cd "$dir"
+
+    local packages=(
+        "albert" 
+        "aura-bin"
+        # "aurutils" 
+        "bibata-cursor-theme-bin"
+        # "brave-bin"
+        # #"eww"
+        # "google-chrome"
+        # "gruvbox-plus-icon-theme-git" 
+        # "libadwaita-without-adwaita-git" 
+        # "mkinitcpio-openswap" 
+        # "nwg-clipman"
+        "nwg-dock-hyprland-bin" 
+        # "octopi"
+        "oh-my-zsh-git"
+        "pamac-all"
+        "pandoc-bin" 
+        "python-clickgen"
+        # "pyprland"
+        # #"repoctl"
+        # "rua"
+        "swayfx"
+        "sway-nvidia"
+        "swayosd-git"
+        "ventoy-bin" 
+        "yay-bin"
+    )
+
+    for i in "${packages[@]}"; do
+        git clone https://aur.archlinux.org/"$i"
+        sudo chmod -R 777 ./"$i" 
+        cd "$i"
+        mkdir -p "$dir/PKGBUILDS/$i/"
+        if [ "$local_version" != "$aur_version" ]; then
+            cp PKGBUILD "$dir/PKGBUILDS/$i"/PKGBUILD
+            sudo -u builder makepkg -cfs --noconfirm # --sign
+            rm -rf "$dir/x86_64/$i"**.pkg.tar.zst
+            mv *.pkg.tar.zst "$dir"/x86_64/
+            cd ..
+            rm -rf "$i"
+        fi
+    done
+    # sudo pacman -U $dir/x86_64/**repoctl** --noconfirm
+    # sudo pacman -U $dir/x86_64/**aurutils** --noconfirm
+    
 }
 
 # Initialize and push to GitHub
@@ -172,6 +154,7 @@ initialize_and_push() {
     sudo git config --global user.email 'github-actions[bot]@users.noreply.github.com'
     sudo git add .
     sudo git commit -am "Update packages"
+    # sudo git pull
     sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/$URL/repo" --force
 }
 
