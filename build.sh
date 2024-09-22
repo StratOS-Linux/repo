@@ -81,7 +81,7 @@ build_and_package() {
     sudo git config --global init.defaultBranch main
 
     local packages=(
-        "albert" 
+        # "albert" 
         # "aura-bin"
           # "aurutils"
         "bibata-cursor-theme-bin"
@@ -92,20 +92,20 @@ build_and_package() {
           # "libadwaita-without-adwaita-git" 
           # "mkinitcpio-openswap" 
           # "nwg-clipman"
-        "nwg-dock-hyprland-bin" 
+        # "nwg-dock-hyprland-bin" 
           # "octopi"
         # "oh-my-zsh-git"
         # "pamac-all"
-        "pandoc-bin" 
+        # "pandoc-bin" 
         # "python-clickgen"
           # "pyprland"
           # #"repoctl"
           # "rua"
         # "swayfx"
         # "sway-nvidia"
-        "swayosd-git"
-        # "ventoy-bin" 
-        "yay-bin"
+        # "swayosd-git"
+        "ventoy-bin" 
+        # "yay-bin"
     )
 
     for i in "${packages[@]}"; do
