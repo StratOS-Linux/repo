@@ -18,7 +18,7 @@ setup_environment() {
     git config --global http.postBuffer 15728640000
 
     export URL="https://$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|').github.io/repo/x86_64"
-    echo -e "\n[stratos]\nSigLevel = Optional TrustAll\nServer = $URL" | sudo tee -a /etc/pacman.conf
+    # echo -e "\n[stratos]\nSigLevel = Optional TrustAll\nServer = $URL" | sudo tee -a /etc/pacman.conf
     sudo sed -i 's/purge debug/purge !debug/g' /etc/makepkg.conf
     sudo sed -i 's/^#* *GPGKEY *=.*/GPGKEY="19A421C3D15C8B7C672F0FACC4B8A73AB86B9411"/' /etc/makepkg.conf # add zstg's public key
     sed -i 's/^#*\(PACKAGER=\).*/\1"StratOS team <stratos-linux@gmail.com>"/' /etc/makepkg.conf
@@ -68,15 +68,15 @@ build_and_package() {
     # sudo pacman -U *.pkg.tar.zst --noconfirm
     # cd $dir
 
-    cd "$dir"/PKGBUILDS/calamares
-    sudo chmod -R 777 "$dir"/PKGBUILDS/calamares
-    sudo -u builder makepkg -cfs --noconfirm # --sign
-    echo "Removing Qt Calamares build..."
-    sudo rm -v **qt5**.pkg.tar.zst
-    sudo rm -rfv *.tar.gz **debug**.pkg.tar.zst calamares/ src/ pkg/
-    rm -fv "$dir"/x86_64/**calamares**.pkg.tar.zst
-    mv -v *.pkg.tar.zst "$dir"/x86_64/
-    cd "$dir"
+    # cd "$dir"/PKGBUILDS/calamares
+    # sudo chmod -R 777 "$dir"/PKGBUILDS/calamares
+    # sudo -u builder makepkg -cfs --noconfirm # --sign
+    # echo "Removing Qt Calamares build..."
+    # sudo rm -v **qt5**.pkg.tar.zst
+    # sudo rm -rfv *.tar.gz **debug**.pkg.tar.zst calamares/ src/ pkg/
+    # rm -fv "$dir"/x86_64/**calamares**.pkg.tar.zst
+    # mv -v *.pkg.tar.zst "$dir"/x86_64/
+    # cd "$dir"
 
     mkdir -p /tmp/grab
     cp "$dir"/PKGBUILDS/grab/PKGBUILD /tmp/grab
