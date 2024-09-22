@@ -171,7 +171,7 @@ build_and_package() {
 
 # Initialize and push to GitHub
 initialize_and_push() {
-    export URL="$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1|')"
+    export URL="$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1/\2|')"
     cd "$dir"
     git config --global --add safe.directory /workspace # unnecessary
     repo-remove x86_64/stratos.db.tar.xz
@@ -180,7 +180,7 @@ initialize_and_push() {
     sudo git config --global user.email 'github-actions[bot]@users.noreply.github.com'
     sudo git add .
     sudo git commit -am "Update packages"
-    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/$URL/repo" --force
+    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/$URL" --force
 }
 
 # Main function
