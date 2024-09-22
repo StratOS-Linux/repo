@@ -174,8 +174,8 @@ initialize_and_push() {
     export URL="$(git config --get remote.origin.url | sed -E 's|.+[:/]([^:/]+)/([^/.]+)(\.git)?|\1/\2|')"
     cd "$dir"
     git config --global --add safe.directory /workspace # unnecessary
-    repo-remove x86_64/stratos.db.tar.xz
-    repo-add -R x86_64/stratos.db.tar.xz x86_64/*.pkg.tar.zst
+    repo-remove x86_64/stratos.db.tar.gz
+    repo-add -R x86_64/stratos.db.tar.gz x86_64/*.pkg.tar.zst
     sudo git config --global user.name 'github-actions[bot]'
     sudo git config --global user.email 'github-actions[bot]@users.noreply.github.com'
     sudo git add .
