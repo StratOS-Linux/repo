@@ -39,6 +39,7 @@ jobs:
           uses: actions/upload-pages-artifact@v3
           with:
             path: ./_site
+            retention-days: 30 # store artifacts for 1 month
 
   deploy:
       permissions: 

@@ -52,12 +52,15 @@ clone_and_build_if_needed() {
 
     # Get AUR version (from AUR's .SRCINFO file)
     local aur_version
-    aur_version=$(curl -s "https://aur.archlinux.org/cgit/aur.git/plain/.SRCINFO?h=$package" | grep -Po '(?<=pkgver = )[\d\w.]+')
+    aur_srcinfo=$(curl -s "https://aur.archlinux.org/cgit/aur.git/plain/.SRCINFO?h=$package")
+    aur_version=$(echo "$aur_srcinfo" | grep -Po '(?<=pkgver = )[\d\w.]+')
+    aur_pkgrel=$(echo "$aur_srcinfo" | grep -Po '(?<=pkgrel = )[\d\w.]+')
+    aur_arch=$(echo "$aur_srcinfo" | grep -Po '(?<=arch = )[\w\d]+')
 
     echo "Checking $package: local version = $local_version, AUR version = $aur_version"
 
     # Only clone and build if versions differ
-    if [ "$local_version" != "$aur_version" ]; then
+    if [ "$local_version" != "$aur_version" || ! -f "$dir/x86_64/$package-$aur_version-$aur_pkgrel-$aur_arch.pkg.tar.zst" ]; then
         git clone https://aur.archlinux.org/"$package".git
         sudo chmod -R 777 ./"$package" 
         cd "$package"
@@ -181,7 +184,7 @@ initialize_and_push() {
     sudo git config --global user.email 'github-actions[bot]@users.noreply.github.com'
     sudo git add .
     sudo git commit -am "Update packages"
-    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/StratOS-Linux/repo" --force
+    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/zstg/repo" --force
 }
 
 # Main function
