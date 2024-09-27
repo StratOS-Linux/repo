@@ -60,7 +60,7 @@ clone_and_build_if_needed() {
     echo "Checking $package: local version = $local_version, AUR version = $aur_version"
 
     # Only clone and build if versions differ
-    if [ "$local_version" != "$aur_version" || ! -f "$dir/x86_64/$package-$aur_version-$aur_pkgrel-$aur_arch.pkg.tar.zst" ]; then
+    if [[ "$local_version" != "$aur_version" || ! -f "$dir/x86_64/$package-$aur_version-$aur_pkgrel-$aur_arch.pkg.tar.zst" ]]; then
         git clone https://aur.archlinux.org/"$package".git
         sudo chmod -R 777 ./"$package" 
         cd "$package"
