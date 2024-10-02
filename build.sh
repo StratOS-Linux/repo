@@ -184,7 +184,8 @@ initialize_and_push() {
     sudo git config --global user.email 'github-actions[bot]@users.noreply.github.com'
     sudo git add .
     sudo git commit -am "Update packages"
-    sudo git push "https://x-access-token:${GITHUB_TOKEN}@github.com/zstg/repo" --force
+    export URL=$(git config --get remote.origin.url | sed "s|^https://|https://x-access-token:${GITHUB_TOKEN}@|")
+    sudo git push "$URL" --force
 }
 
 # Main function
