@@ -1,3 +1,4 @@
+x86_64/
 .env
 /workspace
 /workspace/StratOS-repo/PKGBUILDS/calamares/*.tar.gz

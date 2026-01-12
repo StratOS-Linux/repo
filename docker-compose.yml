@@ -1,10 +1,12 @@
 services:
-  app:
-    build:
-      context: .
-      dockerfile: .gitpod.Dockerfile
-    environment:
-      GITHUB_TOKEN: ${GITHUB_TOKEN}
-    volumes:
-      - .:/workspace  # Mount the current directory to /workspace
-    command: bash /workspace/build.sh 
+    app:
+      build:
+        context: .
+        dockerfile: Dockerfile
+          #environment:
+          #  GITHUB_TOKEN: ${GITHUB_TOKEN}
+      volumes:
+        - .:/repo  # Mount the current directory (i.e repo) to /repo
+      tty: true
+      stdin_open: true
+      command: ["python3",  "/repo/build.py"]
