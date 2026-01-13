@@ -170,7 +170,7 @@ def clone_and_build_if_needed(package, dir_path):
     if not (pkg_files and (local_version == aur_version)):
         temp_dir = Path("/tmp") / package
         shutil.rmtree(temp_dir, ignore_errors=True)
-        subprocess.run(f"git clone --quiet https://aur.archlinux.org/{package}.git {str(temp_dir)} || true", shell=True, check=True)
+        subprocess.run(f"git clone --quiet https://aur.archlinux.org/{package}.git {str(temp_dir)} || git clone --branch {package} --single-branch https://github.com/archlinux/aur.git {str(temp_dir)}", shell=True, check=True)
         subprocess.run(f"sudo chmod -R 777 {str(temp_dir)} || true", shell=True, check=True)
         subprocess.run(f"sudo chown -R builder {str(temp_dir)} || true", shell=True, check=True)
         
